@@ -28,11 +28,21 @@ const Editor = () => {
           to="/"
           className="flex items-center gap-2 font-display font-bold text-lg text-foreground hover:text-primary transition-colors"
         >
-          <svg viewBox="0 0 32 32" className="w-7 h-7">
-            <rect width="32" height="32" rx="8" fill="hsl(var(--primary))" />
-            <path d="M8 12h16M8 16h12M8 20h8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+          <svg viewBox="0 0 32 32" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none">
+            <rect width="32" height="32" rx="8" fill="#288e45" />
+            <rect x="6" y="6" width="6" height="6" fill="#ffffff" />
+            <rect x="14" y="6" width="6" height="6" fill="#ffffff" />
+            <rect x="22" y="6" width="6" height="6" fill="#ffffff" />
+
+            <rect x="6" y="14" width="6" height="6" fill="#ffffff" />
+            <rect x="14" y="14" width="6" height="6" fill="#ffffff" />
+            <rect x="22" y="14" width="6" height="6" fill="#ffffff" />
+
+            <rect x="6" y="22" width="6" height="6" fill="#ffffff" />
+            <rect x="14" y="22" width="6" height="6" fill="#ffffff" />
+            <rect x="22" y="22" width="6" height="6" fill="#ffffff" />
           </svg>
-          IconForge
+          Bright Icons
         </Link>
         <ExportBar state={state} />
       </nav>
