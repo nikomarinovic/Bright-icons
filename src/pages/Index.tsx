@@ -93,8 +93,8 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-muted-foreground text-sm font-display">
-        <p>IconForge — Open source icon background generator</p>
+      <footer class="mt-auto border-t border-border py-4 text-center text-muted-foreground text-sm font-display">
+        <p>© 2026 Niko Marinović. All rights reserved.</p>
       </footer>
     </div>
   );
