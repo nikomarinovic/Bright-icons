@@ -12,18 +12,21 @@ const Index = () => {
       <nav className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto">
         <div className="flex items-center gap-2 font-display font-bold text-xl text-foreground">
           <svg viewBox="0 0 32 32" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none">
+            
             <rect width="32" height="32" rx="8" fill="#288e45" />
-            <rect x="6" y="6" width="6" height="6" fill="#ffffff" />
-            <rect x="14" y="6" width="6" height="6" fill="#ffffff" />
-            <rect x="22" y="6" width="6" height="6" fill="#ffffff" />
 
-            <rect x="6" y="14" width="6" height="6" fill="#ffffff" />
-            <rect x="14" y="14" width="6" height="6" fill="#ffffff" />
-            <rect x="22" y="14" width="6" height="6" fill="#ffffff" />
+            <rect x="5" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="13" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="21" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
 
-            <rect x="6" y="22" width="6" height="6" fill="#ffffff" />
-            <rect x="14" y="22" width="6" height="6" fill="#ffffff" />
-            <rect x="22" y="22" width="6" height="6" fill="#ffffff" />
+            
+            <rect x="5" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="21" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+
+            <rect x="5" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="13" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="21" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
           </svg>
           Bright Icons
         </div>
