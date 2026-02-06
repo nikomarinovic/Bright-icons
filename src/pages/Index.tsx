@@ -93,7 +93,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer class="mt-auto border-t border-border py-4 text-center text-muted-foreground text-sm font-display">
+      <footer class="fixed bottom-0 left-0 w-full border-t border-border py-4 text-center text-muted-foreground text-sm font-display bg-background">
         <p>© 2026 Niko Marinović. All rights reserved.</p>
       </footer>
     </div>
