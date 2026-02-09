@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { icons, type LucideIcon } from "lucide-react";
+import * as TablerIcons from "@tabler/icons-react";
 import {
   Dialog,
   DialogContent,
@@ -11,12 +12,23 @@ import {
 // Deduplicate icons (lucide exports many aliases per icon)
 const seen = new Set<unknown>();
 const ICON_ENTRIES: [string, LucideIcon][] = [];
+
+// Add Lucide icons
 for (const [name, component] of Object.entries(icons)) {
   if (name.endsWith("Icon") || name.startsWith("Lucide")) continue;
   if (seen.has(component)) continue;
   seen.add(component);
   ICON_ENTRIES.push([name, component as LucideIcon]);
 }
+
+// Add Tabler icons
+for (const [name, component] of Object.entries(TablerIcons)) {
+  if (name.endsWith("Icon")) continue; // skip aliases
+  if (seen.has(component)) continue;
+  seen.add(component);
+  ICON_ENTRIES.push([`Tabler${name}`, component as LucideIcon]);
+}
+
 ICON_ENTRIES.sort((a, b) => a[0].localeCompare(b[0]));
 
 // Convert PascalCase to readable
