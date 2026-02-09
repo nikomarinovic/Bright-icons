@@ -93,8 +93,13 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer class="fixed bottom-0 left-0 w-full border-t border-border py-4 text-center text-muted-foreground text-sm font-display bg-background">
+      <footer class="fixed bottom-0 left-0 w-full border-t border-border py-4 text-center text-muted-foreground text-sm font-display bg-background flex flex-col items-center gap-1">
         <p>© 2026 Niko Marinović. All rights reserved.</p>
+        <a href="https://github.com/nikomarinovic" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.11.78-.25.78-.56v-2.02c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.68 5.41-5.23 5.7.41.36.77 1.08.77 2.18v3.23c0 .31.21.68.79.56A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5z"/>
+          </svg>
+        </a>
       </footer>
     </div>
   );
