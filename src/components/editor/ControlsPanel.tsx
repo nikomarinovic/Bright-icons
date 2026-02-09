@@ -54,45 +54,8 @@ const BG_PATTERNS: { value: BgPattern; label: string }[] = [
 ];
 
 const ICON_COLORS = [
-  null,
-  "#ffffff",
-  "#000000",
-
-  // original
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#3b82f6",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
-  "#6366f1",
-
-  // vibrant
-  "#dc2626",
-  "#ea580c",
-  "#ca8a04",
-  "#16a34a",
-  "#2563eb",
-  "#7c3aed",
-  "#db2777",
-  "#0d9488",
-  "#4f46e5",
-  "#9333ea",
-  "#06b6d4",
-
-  // pastel
-  "#fecaca",
-  "#fed7aa",
-  "#fef3c7",
-  "#bbf7d0",
-  "#bae6fd",
-  "#c7d2fe",
-  "#ddd6fe",
-  "#fbcfe8",
-  "#99f6e4",
-  "#e5e7eb",
+  null, "#ffffff", "#000000", "#ef4444", "#f97316", "#eab308",
+  "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#14b8a6", "#6366f1",
 ];
 
 const SectionHeader = ({ children }: { children: React.ReactNode }) => (
