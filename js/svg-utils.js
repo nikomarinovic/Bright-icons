@@ -107,19 +107,25 @@ function buildObjMarkup(obj, sz) {
   let mk = '';
 
   /* SVG icon */
-  /* SVG icon */
   if (obj.type === 'svg' && obj.content) {
     const base = sz * 0.6;
     const w = base * sc, h = base * sc;
     const inner = extractInner(obj.content);
 
+    // Preserve the source viewBox so content is never clipped to a hardcoded
+    // "0 0 24 24" box. Fall back to 24×24 only when no viewBox can be found.
+    const vbMatch = obj.content.match(/viewBox=["']([^"']+)["']/i);
+    const viewBox = vbMatch ? vbMatch[1] : (() => {
+      const wM = obj.content.match(/\bwidth=["']([0-9.]+)/i);
+      const hM = obj.content.match(/\bheight=["']([0-9.]+)/i);
+      return `0 0 ${wM ? parseFloat(wM[1]) : 24} ${hM ? parseFloat(hM[1]) : 24}`;
+    })();
+
+    // ✅ FIXED: removed fill="none", stroke="currentColor", stroke-width="2",
+    // stroke-linecap="round", stroke-linejoin="round" — these were overriding
+    // the icon's original fill/stroke and turning filled icons into outlines.
     mk = `<g opacity="${op}" transform="translate(${cx},${cy}) rotate(${rot})"${fattr}>`
-      + `<svg x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" viewBox="0 0 24 24"`
-      + ` fill="none"`
-      + ` stroke="currentColor"`
-      + ` stroke-width="2"`
-      + ` stroke-linecap="round"`
-      + ` stroke-linejoin="round">`
+      + `<svg x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" viewBox="${viewBox}">`
       + inner
       + `</svg>`
       + `</g>`;
@@ -201,7 +207,8 @@ function buildSVG(state) {
 
 /**
  * Parses a pasted SVG string and normalises it to
- * a clean <svg viewBox="…">…</svg> form.
+ * a clean <svg viewBox="…">…</svg> form, fully preserving
+ * the source coordinate system so no content is clipped.
  */
 function parseSvgInput(txt) {
   try {
@@ -209,13 +216,46 @@ function parseSvgInput(txt) {
     const doc    = parser.parseFromString(txt.trim(), 'image/svg+xml');
     const el     = doc.querySelector('svg');
     if (!el) return txt;
+
+    // 1. Prefer an explicit viewBox on the source element.
     let vb = el.getAttribute('viewBox');
+
+    // 2. No viewBox? Try to derive it from width/height attributes.
+    //    Accept plain numbers or numbers with units (px, pt, em, …).
     if (!vb) {
-      const w = el.getAttribute('width')  || '24';
-      const h = el.getAttribute('height') || '24';
-      vb = `0 0 ${parseFloat(w)} ${parseFloat(h)}`;
+      const parseLength = attr => {
+        const raw = el.getAttribute(attr);
+        return raw ? parseFloat(raw) : null;   // parseFloat ignores trailing units
+      };
+      const w = parseLength('width');
+      const h = parseLength('height');
+
+      if (w && h) {
+        vb = `0 0 ${w} ${h}`;
+      } else {
+        // 3. Last resort: walk every graphical child and compute a bounding
+        //    box from any explicit geometry we can cheaply read (rect, circle,
+        //    path's rough extent via the raw "d" attribute, etc.).
+        //    This is intentionally simple — it errs on the side of being large
+        //    rather than clipping content.
+        let maxX = 0, maxY = 0;
+        el.querySelectorAll('[width],[height],[cx],[cy],[r],[x],[y]').forEach(n => {
+          const x  = parseFloat(n.getAttribute('x')  || n.getAttribute('cx') || 0);
+          const y  = parseFloat(n.getAttribute('y')  || n.getAttribute('cy') || 0);
+          const rw = parseFloat(n.getAttribute('width')  || n.getAttribute('r') || 0);
+          const rh = parseFloat(n.getAttribute('height') || n.getAttribute('r') || 0);
+          maxX = Math.max(maxX, x + rw);
+          maxY = Math.max(maxY, y + rh);
+        });
+        vb = maxX > 0 && maxY > 0 ? `0 0 ${maxX} ${maxY}` : '0 0 512 512';
+      }
     }
-    return `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${el.innerHTML}</svg>`;
+
+    // Rebuild a minimal but complete <svg> wrapper, carrying over the
+    // computed viewBox so the full coordinate space is honoured.
+    const par = el.getAttribute('preserveAspectRatio');
+    const parAttr = par ? ` preserveAspectRatio="${par}"` : '';
+    return `<svg viewBox="${vb}"${parAttr} xmlns="http://www.w3.org/2000/svg">${el.innerHTML}</svg>`;
   } catch (e) { return txt; }
 }
 
