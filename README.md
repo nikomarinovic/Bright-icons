@@ -32,10 +32,15 @@
 
 ## How It Works
 
-1. Choose a background color, shape, and pattern  
-2. Select an icon, upload your own file, or paste raw SVG code  
-3. Customize the icon color, size, and position freely  
-4. Export as SVG, PNG, or JPG — or copy the SVG code instantly  
+Creating your perfect icon is fast and intuitive:
+
+1. **Pick your canvas** – choose a background color, shape, and pattern.  
+2. **Add an icon** – select from our library, upload your own, or paste raw SVG code.  
+3. **Customize freely** – adjust color, size, rotation, and position to get the look you want.  
+4. **Export instantly** – download as **SVG**, **PNG**, or **JPG**, or copy the SVG code directly.  
+
+> [!TIP]
+> You can mix and match backgrounds, shapes, and icons to create completely unique visuals in seconds.
 
 ---
 
