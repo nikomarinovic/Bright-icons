@@ -240,14 +240,19 @@ body{
 
 /* ── Status bar ── */
 .status-bar{
-  position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:0.45rem;
+  position:fixed;bottom:1rem;left:0;right:0;
+  display:flex;align-items:center;justify-content:center;gap:0.45rem;
   padding:0.45rem 0.9rem;
-  background:var(--card);border:1px solid var(--border);border-radius:9999px;
   font-family:var(--font-mono);font-size:0.6rem;color:var(--muted-fg);
   opacity:0;animation:fadeUp 0.5s ease 1.6s forwards;
-  white-space:nowrap;
   z-index:50;
+  pointer-events:none;
+}
+.status-bar-inner{
+  display:flex;align-items:center;gap:0.45rem;
+  background:var(--card);border:1px solid var(--border);border-radius:9999px;
+  padding:0.45rem 0.9rem;
+  white-space:nowrap;
 }
 .status-dot{width:6px;height:6px;background:#f59e0b;border-radius:50%;animation:dotBlink 1.5s ease-in-out infinite;}
 @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:0.2}}
@@ -383,8 +388,10 @@ body{
 </div>
 
 <div class="status-bar">
-  <div class="status-dot"></div>
-  Viewport too small · min 1024px
+  <div class="status-bar-inner">
+    <div class="status-dot"></div>
+    Viewport too small · min 1024px
+  </div>
 </div>
 
 <script>
@@ -397,6 +404,7 @@ for(let i=0;i<12;i++){
 }
 
 function continueAnyway(){
+  sessionStorage.setItem('mobileBypass', 'true');
   document.body.style.transition='opacity 0.4s';
   document.body.style.opacity='0';
   setTimeout(()=>{ window.location.href='index.html'; },400);

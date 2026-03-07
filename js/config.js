@@ -68,10 +68,14 @@ const SITE_CONFIG = {
 
   // 2. Mobile check — only runs when not in maintenance mode
   if (cfg.mobileRedirect && !isWallPage()) {
-    const isMobile = window.innerWidth < cfg.mobileBreakpoint ||
-                     /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isMobile) {
-      window.location.replace(cfg.pages.mobileWall);
+    // If user clicked "Continue anyway", skip redirect for this session
+    const bypassed = sessionStorage.getItem('mobileBypass') === 'true';
+    if (!bypassed) {
+      const isMobile = window.innerWidth < cfg.mobileBreakpoint ||
+                       /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.replace(cfg.pages.mobileWall);
+      }
     }
   }
   // 3. Right-click protection
