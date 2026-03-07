@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bright Icons — Editor</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── Top bar ───────────────────────────── -->
+  <nav class="topbar">
+    <a class="logo" href="index.html">
+      <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
+        <rect width="28" height="28" rx="7" fill="#288e45"/>
+        <rect x="4"    y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="11.5" y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="19"   y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="4"    y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="11.5" y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="19"   y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="4"    y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="11.5" y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+        <rect x="19"   y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+      </svg>
+      Bright Icons
+    </a>
+    <div class="export-row">
+      <button class="exp-btn" id="export-svg-btn">↓ SVG</button>
+      <button class="exp-btn" id="export-png-btn">↓ PNG</button>
+      <button class="exp-btn" id="export-jpg-btn">↓ JPG</button>
+      <button class="exp-btn" id="copy-svg-btn">Copy SVG</button>
+    </div>
+  </nav>
+
+  <!-- ── Main ──────────────────────────────── -->
+  <div class="main">
+
+    <!-- ── Sidebar ─────────────────────────── -->
+    <aside class="sidebar">
+
+      <!-- Background Color -->
+      <div class="sec">
+        <div class="sec-hdr">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5"  cy="7.5"  r=".5" fill="currentColor"/>
+            <circle cx="6.5"  cy="12.5" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+          </svg>
+          Background Color
+        </div>
+        <div class="pal" id="bg-pal"></div>
+        <div class="color-row">
+          <input type="color" class="color-picker" id="bg-picker" value="#238636"/>
+          <input type="text"  class="text-inp"     id="bg-hex"    value="#238636" placeholder="#rrggbb"/>
+        </div>
+      </div>
+
+      <!-- Background Shape -->
+      <div class="sec">
+        <div class="sec-hdr">Background Shape</div>
+        <div class="grid6">
+          <button class="sbtn active" data-shape="rounded" title="Rounded">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>
+          </button>
+          <button class="sbtn" data-shape="circle" title="Circle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          </button>
+          <button class="sbtn" data-shape="square" title="Square">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>
+          </button>
+          <button class="sbtn" data-shape="hexagon" title="Hexagon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+          </button>
+          <button class="sbtn" data-shape="diamond" title="Diamond">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 12 12 22 2 12"/></svg>
+          </button>
+          <button class="sbtn" data-shape="star" title="Star">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Background Pattern -->
+      <div class="sec">
+        <div class="sec-hdr">Background Pattern</div>
+        <div class="grid5">
+          <button class="pbtn active" data-pattern="none">None</button>
+          <button class="pbtn"        data-pattern="dots">Dots</button>
+          <button class="pbtn"        data-pattern="grid">Grid</button>
+          <button class="pbtn"        data-pattern="diagonal">Lines</button>
+          <button class="pbtn"        data-pattern="cross">Cross</button>
+        </div>
+      </div>
+
+      <!-- Add Objects -->
+      <div class="sec">
+        <div class="sec-hdr">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+          </svg>
+          Add Object
+        </div>
+
+        <!-- Primary add buttons -->
+        <div class="add-grid">
+          <button class="add-btn" id="add-icon-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/>
+              <path d="m21 15-3-3a2 2 0 0 0-3 0L6 21"/>
+            </svg>
+            Icons
+          </button>
+          <button class="add-btn" id="upload-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>
+            </svg>
+            Upload
+          </button>
+          <button class="add-btn" id="paste-svg-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+            Paste SVG
+          </button>
+          <button class="add-btn" id="add-text-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 7 4 4 20 4 20 7"/>
+              <line x1="9" x2="15" y1="20" y2="20"/>
+              <line x1="12" x2="12" y1="4" y2="20"/>
+            </svg>
+            Text
+          </button>
+        </div>
+
+        <!-- Shape quick-add -->
+        <div class="sec-hdr" style="margin-top:.4rem">Add Shape</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.25rem">
+          <button class="add-btn" data-add-shape="circle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+            Circle
+          </button>
+          <button class="add-btn" data-add-shape="square">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>
+            Square
+          </button>
+          <button class="add-btn" data-add-shape="rounded">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/></svg>
+            Round
+          </button>
+          <button class="add-btn" data-add-shape="triangle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4 21 20H3Z"/></svg>
+            Tri
+          </button>
+          <button class="add-btn" data-add-shape="diamond">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 22,12 12,22 2,12"/></svg>
+            Diamond
+          </button>
+          <button class="add-btn" data-add-shape="star">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"/></svg>
+            Star
+          </button>
+          <button class="add-btn" data-add-shape="ring">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="8"/></svg>
+            Ring
+          </button>
+          <button class="add-btn" data-add-shape="line">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="12" x2="20" y2="12"/></svg>
+            Line
+          </button>
+        </div>
+
+        <!-- Paste SVG area (hidden by default) -->
+        <div id="paste-area" class="paste-area">
+          <textarea class="svg-ta" id="svg-ta" placeholder="<svg viewBox=&quot;0 0 24 24&quot;>...</svg>"></textarea>
+          <button class="prim-btn" id="paste-apply">Apply SVG</button>
+        </div>
+
+        <input type="file" id="file-input" accept=".svg,.png,.jpg,.jpeg,.webp,.gif" style="display:none"/>
+      </div>
+
+      <!-- Layers -->
+      <div class="sec">
+        <div class="sec-hdr">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+            <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/>
+            <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>
+          </svg>
+          Layers
+        </div>
+        <div class="layers-list" id="layers-panel">
+          <div class="empty-msg">No objects yet.<br>Add icons or shapes above.</div>
+        </div>
+      </div>
+
+      <!-- Selected Object Controls -->
+      <div class="sec">
+        <div class="sec-hdr">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/>
+          </svg>
+          Selected Object
+        </div>
+        <div id="obj-ctrl">
+          <div class="empty-msg">Select a layer to edit.</div>
+        </div>
+      </div>
+
+      <!-- Snap to Grid -->
+      <div class="sec">
+        <div class="sec-hdr">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="7" height="7" x="3"  y="3"  rx="1"/>
+            <rect width="7" height="7" x="14" y="3"  rx="1"/>
+            <rect width="7" height="7" x="14" y="14" rx="1"/>
+            <rect width="7" height="7" x="3"  y="14" rx="1"/>
+          </svg>
+          Snap to Grid
+        </div>
+        <div class="snap-row">
+          <button class="sec-btn" id="snap-btn" style="flex:0 0 auto">Off</button>
+          <div id="grid-size-row" style="display:none;align-items:center;gap:.4rem;flex:1">
+            <span style="font-size:.7rem;color:var(--muted-fg);font-family:var(--font-mono)">Size:</span>
+            <input type="range" id="grid-slider" min="4" max="64" step="4" value="16" style="flex:1"/>
+            <span id="grid-val" style="font-family:var(--font-mono);font-size:.7rem;color:var(--fg);width:1.5rem">16</span>
+          </div>
+        </div>
+      </div>
+
+    </aside><!-- /sidebar -->
+
+    <!-- ── Canvas ───────────────────────────── -->
+    <main class="canvas-area">
+      <div class="canvas-wrap">
+        <div class="canvas-lbl">Live Preview</div>
+        <div id="canvas-box" style="width:min(400px, calc(100vw - 380px)); aspect-ratio:1; overflow:hidden">
+          <svg id="canvas-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="canvas-info" id="canvas-info">
+          <span>Click a layer then drag to move</span>
+        </div>
+      </div>
+    </main>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ── Icon Picker Modal ──────────────────── -->
+<div id="icon-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">Icon Library</span>
+      <button class="modal-close" id="modal-close-btn">✕</button>
+    </div>
+    <input type="text" class="search-inp" id="icon-search"
+           placeholder="Search icons… (e.g. arrow, star, user, home)"/>
+    <div class="icon-count" id="icon-count"></div>
+    <div class="icons-grid" id="icons-grid"></div>
+  </div>
+</div>
+
+<!-- ── Scripts (order matters) ───────────── -->
+<script src="js/icons.js"></script>
+<script src="js/svg-utils.js"></script>
+<script src="js/editor.js"></script>
+
+</body>
+</html>
