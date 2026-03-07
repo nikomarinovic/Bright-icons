@@ -138,10 +138,15 @@ body.editor-body { overflow: hidden; }
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
+  flex-wrap: wrap;
   max-width: 1100px;
   margin: 0 auto;
 }
-
+.nav-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 .nav-logo {
   display: flex;
   align-items: center;
@@ -167,6 +172,24 @@ body.editor-body { overflow: hidden; }
   transition: background 0.2s;
 }
 .nav-btn:hover { background: var(--muted); color: var(--fg); }
+
+/* Responsive behavior */
+@media (max-width: 600px) {
+  .nav {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-logo {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 /* ── Hero ── */
 .hero {
