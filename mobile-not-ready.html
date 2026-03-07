@@ -30,9 +30,11 @@ body{
   color:var(--fg);
   font-family:var(--font-body);
   min-height:100vh;
+  min-height:100dvh;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  overflow:hidden;
+  overflow-x:hidden;
+  overflow-y:auto;
   position:relative;
 }
 
@@ -47,14 +49,14 @@ body{
 }
 .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;}
 .orb-1{
-  width:500px;height:500px;
-  background:radial-gradient(circle,rgba(40,142,69,0.11) 0%,transparent 70%);
-  top:-150px;left:50%;transform:translateX(-50%);
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(40,142,69,0.13) 0%,transparent 70%);
+  top:-80px;left:50%;transform:translateX(-50%);
 }
 .orb-2{
-  width:350px;height:350px;
-  background:radial-gradient(circle,rgba(46,165,102,0.07) 0%,transparent 70%);
-  bottom:-80px;left:-60px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(46,165,102,0.08) 0%,transparent 70%);
+  bottom:-60px;left:-40px;
 }
 
 /* ── Particles ── */
@@ -72,11 +74,12 @@ body{
 
 /* ── Nav ── */
 .nav-logo{
-  position:fixed;top:1.5rem;left:1.5rem;
-  display:flex;align-items:center;gap:0.5rem;
-  font-family:var(--font-mono);font-weight:700;font-size:0.95rem;
+  position:fixed;top:1rem;left:1rem;
+  display:flex;align-items:center;gap:0.45rem;
+  font-family:var(--font-mono);font-weight:700;font-size:0.85rem;
   color:var(--fg);text-decoration:none;
   opacity:0;animation:fadeUp 0.5s ease 0.1s forwards;
+  z-index:100;
 }
 
 /* ── Content ── */
@@ -84,13 +87,17 @@ body{
   position:relative;z-index:10;
   display:flex;flex-direction:column;
   align-items:center;text-align:center;
-  padding:2rem 1.5rem;max-width:520px;
+  padding:5rem 1.25rem 5rem;
+  width:100%;
+  max-width:420px;
 }
 
 /* ── Device scene ── */
 .device-scene{
-  position:relative;width:200px;height:180px;
-  margin-bottom:2.5rem;
+  position:relative;
+  width:160px;height:140px;
+  margin-bottom:2rem;
+  flex-shrink:0;
   opacity:0;
   animation:sceneIn 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards;
 }
@@ -99,21 +106,17 @@ body{
   to{opacity:1;transform:scale(1) rotate(0deg)}
 }
 
-/* Desktop monitor */
 .monitor{
-  position:absolute;
-  left:0;top:0;
+  position:absolute;left:0;top:0;
   animation:monitorFloat 4s ease-in-out 1.5s infinite;
 }
 @keyframes monitorFloat{
   0%,100%{transform:translate(0,0) rotate(0deg)}
-  50%{transform:translate(-5px,-8px) rotate(-2deg)}
+  50%{transform:translate(-4px,-6px) rotate(-2deg)}
 }
 
-/* Phone */
 .phone{
-  position:absolute;
-  right:0;bottom:0;
+  position:absolute;right:0;bottom:0;
   animation:phoneShake 0.4s ease-in-out 1.8s 4, phoneFloat 4s ease-in-out 3.5s infinite;
 }
 @keyframes phoneShake{
@@ -123,18 +126,14 @@ body{
 }
 @keyframes phoneFloat{
   0%,100%{transform:translate(0,0) rotate(0deg)}
-  50%{transform:translate(5px,-6px) rotate(3deg)}
+  50%{transform:translate(4px,-5px) rotate(3deg)}
 }
 
-/* Arrow between them */
 .arrow-badge{
-  position:absolute;
-  left:50%;top:50%;
+  position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%);
-  width:32px;height:32px;
-  border-radius:50%;
-  background:var(--secondary);
-  border:1px solid var(--border);
+  width:28px;height:28px;border-radius:50%;
+  background:var(--secondary);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
   opacity:0;
   animation:badgeIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.3s forwards, arrowPulse 2s ease-in-out 2s infinite;
@@ -142,25 +141,25 @@ body{
 @keyframes badgeIn{from{opacity:0;transform:translate(-50%,-50%) scale(0)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @keyframes arrowPulse{
   0%,100%{box-shadow:0 0 0 0 rgba(40,142,69,0.4)}
-  50%{box-shadow:0 0 0 8px rgba(40,142,69,0)}
+  50%{box-shadow:0 0 0 7px rgba(40,142,69,0)}
 }
 
-/* ── Text ── */
+/* ── Badge pill ── */
 .badge-pill{
   display:inline-flex;align-items:center;gap:0.4rem;
-  padding:0.375rem 1rem;border-radius:9999px;
+  padding:0.3rem 0.85rem;border-radius:9999px;
   background:var(--secondary);border:1px solid var(--border);
-  font-family:var(--font-mono);font-size:0.7rem;color:#f59e0b;
-  margin-bottom:1.25rem;
+  font-family:var(--font-mono);font-size:0.65rem;color:#f59e0b;
+  margin-bottom:1rem;
   opacity:0;animation:fadeUp 0.6s ease 0.75s forwards;
 }
-.badge-pill svg{flex-shrink:0;}
 
+/* ── Title ── */
 .page-title{
   font-family:var(--font-mono);
-  font-size:clamp(1.5rem,5vw,2.4rem);
+  font-size:clamp(1.6rem,7vw,2.2rem);
   font-weight:700;color:var(--fg);
-  line-height:1.2;margin-bottom:0.75rem;
+  line-height:1.2;margin-bottom:0.65rem;
   opacity:0;animation:fadeUp 0.6s ease 0.9s forwards;
 }
 .page-title span{
@@ -169,31 +168,30 @@ body{
 }
 
 .page-desc{
-  font-size:0.95rem;color:var(--muted-fg);
-  line-height:1.75;margin-bottom:1.5rem;
+  font-size:0.88rem;color:var(--muted-fg);
+  line-height:1.7;margin-bottom:1.4rem;
   opacity:0;animation:fadeUp 0.6s ease 1.05s forwards;
 }
 
-/* ── Feature list (what's desktop-only) ── */
+/* ── Feature list ── */
 .feature-list{
-  width:100%;max-width:340px;
-  display:flex;flex-direction:column;gap:0.4rem;
-  margin-bottom:2rem;
+  width:100%;
+  display:flex;flex-direction:column;gap:0.35rem;
+  margin-bottom:1.75rem;
   opacity:0;animation:fadeUp 0.6s ease 1.15s forwards;
 }
 .feat{
-  display:flex;align-items:center;gap:0.65rem;
-  padding:0.5rem 0.75rem;
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.5rem 0.7rem;
   border-radius:0.5rem;
   background:var(--secondary);
   border:1px solid var(--border);
-  font-family:var(--font-mono);font-size:0.7rem;
+  font-family:var(--font-mono);font-size:0.68rem;
   color:var(--muted-fg);
-  transition:border-color 0.3s,color 0.3s;
+  text-align:left;
 }
-.feat:hover{border-color:rgba(40,142,69,0.4);color:var(--fg);}
 .feat-icon{
-  width:26px;height:26px;border-radius:0.375rem;
+  width:24px;height:24px;border-radius:0.3rem;
   background:rgba(40,142,69,0.1);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
@@ -201,59 +199,61 @@ body{
 
 /* ── Buttons ── */
 .btn-stack{
-  display:flex;flex-direction:column;gap:0.6rem;
-  width:100%;max-width:320px;
+  display:flex;flex-direction:column;gap:0.55rem;
+  width:100%;
   opacity:0;animation:fadeUp 0.6s ease 1.3s forwards;
 }
 
 .btn-primary{
   display:flex;align-items:center;justify-content:center;gap:0.5rem;
-  padding:0.8rem 1.5rem;border-radius:0.625rem;
+  padding:0.85rem 1.5rem;border-radius:0.625rem;
   background:var(--grad-accent);color:#fff;
   font-family:var(--font-mono);font-weight:600;font-size:0.85rem;
   text-decoration:none;border:none;cursor:pointer;
   transition:transform 0.25s,box-shadow 0.25s;
   box-shadow:0 4px 20px rgba(40,142,69,0.25);
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 8px 32px rgba(40,142,69,0.4);}
 .btn-primary:active{transform:scale(0.97);}
 
 .btn-secondary{
   display:flex;align-items:center;justify-content:center;gap:0.5rem;
-  padding:0.8rem 1.5rem;border-radius:0.625rem;
+  padding:0.85rem 1.5rem;border-radius:0.625rem;
   background:var(--secondary);color:var(--fg);
   font-family:var(--font-mono);font-weight:500;font-size:0.85rem;
   text-decoration:none;border:1px solid var(--border);cursor:pointer;
-  transition:all 0.25s;
+  transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-secondary:hover{background:var(--muted);transform:translateY(-2px);}
 .btn-secondary:active{transform:scale(0.97);}
 
 .btn-ghost{
   display:flex;align-items:center;justify-content:center;gap:0.5rem;
-  padding:0.7rem 1.5rem;border-radius:0.625rem;
+  padding:0.75rem 1.5rem;border-radius:0.625rem;
   background:transparent;color:var(--muted-fg);
-  font-family:var(--font-mono);font-size:0.78rem;
+  font-family:var(--font-mono);font-size:0.75rem;
   border:1px dashed var(--border);cursor:pointer;
-  transition:all 0.25s;
+  transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-ghost:hover{border-color:var(--primary);color:var(--primary);}
+.btn-ghost:active{border-color:var(--primary);color:var(--primary);}
 
 /* ── Status bar ── */
 .status-bar{
-  position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:0.5rem;
-  padding:0.5rem 1.1rem;
+  position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:0.45rem;
+  padding:0.45rem 0.9rem;
   background:var(--card);border:1px solid var(--border);border-radius:9999px;
-  font-family:var(--font-mono);font-size:0.65rem;color:var(--muted-fg);
+  font-family:var(--font-mono);font-size:0.6rem;color:var(--muted-fg);
   opacity:0;animation:fadeUp 0.5s ease 1.6s forwards;
   white-space:nowrap;
+  z-index:50;
 }
 .status-dot{width:6px;height:6px;background:#f59e0b;border-radius:50%;animation:dotBlink 1.5s ease-in-out infinite;}
 @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:0.2}}
 
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(16px)}
+  from{opacity:0;transform:translateY(14px)}
   to{opacity:1;transform:translateY(0)}
 }
 </style>
@@ -266,9 +266,17 @@ body{
 <div class="particles" id="particles"></div>
 
 <a href="index.html" class="nav-logo">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <rect width="24" height="24" rx="6" fill="#288e45"/>
-    <path d="M7 12l3.5 3.5L17 8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none">
+    <rect width="32" height="32" rx="8" fill="#288e45"/>
+    <rect x="5" y="5" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="13" y="5" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="21" y="5" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="5" y="13" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="21" y="13" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="5" y="21" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="13" y="21" width="6" height="6" rx="1.5" fill="#ffffff"/>
+    <rect x="21" y="21" width="6" height="6" rx="1.5" fill="#ffffff"/>
   </svg>
   Bright Icons
 </a>
@@ -276,51 +284,39 @@ body{
 <div class="content">
 
   <div class="device-scene">
-
-    <!-- Desktop monitor -->
-    <svg class="monitor" width="110" height="100" viewBox="0 0 110 100" fill="none">
-      <!-- screen body -->
+    <!-- Desktop monitor (scaled down for mobile) -->
+    <svg class="monitor" width="88" height="80" viewBox="0 0 110 100" fill="none">
       <rect x="2" y="2" width="90" height="65" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
-      <!-- screen glow -->
       <rect x="8" y="8" width="78" height="52" rx="3" fill="#0d1117"/>
-      <!-- content lines -->
       <rect x="14" y="14" width="36" height="3" rx="1.5" fill="#288e45" opacity="0.8"/>
       <rect x="14" y="21" width="52" height="2" rx="1" fill="#30363d"/>
       <rect x="14" y="27" width="44" height="2" rx="1" fill="#30363d"/>
       <rect x="14" y="33" width="48" height="2" rx="1" fill="#30363d"/>
-      <!-- mini icon preview -->
       <rect x="58" y="14" width="22" height="22" rx="4" fill="#21262d" stroke="#288e45" stroke-width="1"/>
       <path d="M64 25l3 3 5-5" stroke="#288e45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- stand -->
       <path d="M42 67v10M30 77h24" stroke="#30363d" stroke-width="2" stroke-linecap="round"/>
     </svg>
 
     <!-- Arrow -->
     <div class="arrow-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
         <path d="M5 12h14M13 6l6 6-6 6" stroke="#6e7681" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
     <!-- Phone with X -->
-    <svg class="phone" width="65" height="110" viewBox="0 0 65 110" fill="none">
-      <!-- body -->
+    <svg class="phone" width="52" height="88" viewBox="0 0 65 110" fill="none">
       <rect x="2" y="2" width="60" height="106" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
-      <!-- screen -->
       <rect x="7" y="12" width="50" height="78" rx="4" fill="#0d1117"/>
-      <!-- notch -->
       <rect x="22" y="5" width="20" height="5" rx="2.5" fill="#30363d"/>
-      <!-- home indicator -->
       <rect x="22" y="96" width="20" height="3" rx="1.5" fill="#30363d"/>
-      <!-- X mark (no mobile) -->
       <circle cx="32" cy="51" r="18" fill="#21262d" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4 2"/>
       <path d="M25 44l14 14M39 44L25 58" stroke="#f87171" stroke-width="2.5" stroke-linecap="round"/>
     </svg>
-
   </div>
 
   <div class="badge-pill">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
       <path d="M12 8v4m0 4h.01" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
       <circle cx="12" cy="12" r="9" stroke="#f59e0b" stroke-width="2"/>
     </svg>
@@ -336,7 +332,7 @@ body{
   <div class="feature-list">
     <div class="feat">
       <div class="feat-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
           <path d="M12 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="#288e45" stroke-width="2" stroke-linecap="round"/>
           <path d="M15 3h6v6M10 14L21 3" stroke="#288e45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -345,7 +341,7 @@ body{
     </div>
     <div class="feat">
       <div class="feat-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="3" fill="#288e45"/>
           <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke="#288e45" stroke-width="2" stroke-linecap="round"/>
         </svg>
@@ -354,7 +350,7 @@ body{
     </div>
     <div class="feat">
       <div class="feat-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
           <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="#288e45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
@@ -364,20 +360,20 @@ body{
 
   <div class="btn-stack">
     <a href="index.html" class="btn-primary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
         <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
       Switch to Desktop
     </a>
     <button onclick="history.back()" class="btn-secondary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
         <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       Go Back
     </button>
     <button onclick="continueAnyway()" class="btn-ghost">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
         <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       Continue anyway (not recommended)
@@ -388,24 +384,22 @@ body{
 
 <div class="status-bar">
   <div class="status-dot"></div>
-  Viewport too small · min 1024px required
+  Viewport too small · min 1024px
 </div>
 
 <script>
-// Particles
 const c=document.getElementById('particles');
-for(let i=0;i<16;i++){
+for(let i=0;i<12;i++){
   const p=document.createElement('div');
   p.className='particle';
-  p.style.cssText=`left:${Math.random()*100}%;--drift:${(Math.random()-.5)*80}px;animation-duration:${7+Math.random()*11}s;animation-delay:${Math.random()*9}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;`;
+  p.style.cssText=`left:${Math.random()*100}%;--drift:${(Math.random()-.5)*60}px;animation-duration:${7+Math.random()*11}s;animation-delay:${Math.random()*9}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;`;
   c.appendChild(p);
 }
 
 function continueAnyway(){
-  const dest = 'index.html';
   document.body.style.transition='opacity 0.4s';
   document.body.style.opacity='0';
-  setTimeout(()=>{ window.location.href = dest; }, 400);
+  setTimeout(()=>{ window.location.href='index.html'; },400);
 }
 </script>
 </body>
