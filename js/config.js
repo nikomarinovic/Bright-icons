@@ -1,13 +1,13 @@
 /* ═══════════════════════════════════════════
    Bright Icons — js/config.js
    Site-wide feature flags.
-   Last saved: 2026-03-08T11:22:51.404Z
+   Last saved: 2026-03-08T11:23:51.350Z
    ═══════════════════════════════════════════ */
 const SITE_CONFIG = {
-  maintenance:       false,
+  maintenance:       true,
   mobileRedirect:    false,
   mobileBreakpoint:  1024,
-  disableRightClick: true,
+  disableRightClick: false,
   pages: {
     maintenance:      'maintenance.html',
     mobileWall:       'mobile-not-ready.html',
