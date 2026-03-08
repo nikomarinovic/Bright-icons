@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="js/config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -34,8 +35,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-overflow-x:hidden;
-overflow-y:auto;
+overflow:hidden;
 position:relative;
 }
 
@@ -93,16 +93,11 @@ animation:particleFloat linear infinite;
 /* ── Nav ── */
 .nav-logo{
 position:fixed;
-top:1rem;left:1rem;
+top:1.5rem;left:1.5rem;
 display:flex;align-items:center;gap:0.5rem;
-font-family:var(–font-mono);font-weight:700;font-size:0.85rem;
+font-family:var(–font-mono);font-weight:700;font-size:0.95rem;
 color:var(–fg);text-decoration:none;
 opacity:0;animation:fadeUp 0.5s ease 0.1s forwards;
-z-index:100;
-background:rgba(13,17,23,0.6);
-backdrop-filter:blur(8px);
-padding:0.4rem 0.7rem;
-border-radius:0.5rem;
 }
 
 /* ── Main scene ── */
@@ -110,21 +105,16 @@ border-radius:0.5rem;
 position:relative;z-index:10;
 display:flex;flex-direction:column;
 align-items:center;text-align:center;
-/* top padding accounts for fixed nav on mobile */
-padding:5rem 1.25rem 6rem;
-width:100%;
-max-width:620px;
-gap:0;
+padding:2rem;max-width:620px;gap:0;
 }
 
 /* ── Gear scene ── */
 .gear-scene{
 position:relative;
-width:160px;height:160px;
-margin-bottom:2rem;
+width:180px;height:180px;
+margin-bottom:2.5rem;
 opacity:0;
 animation:sceneIn 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards;
-flex-shrink:0;
 }
 @keyframes sceneIn{
 from{opacity:0;transform:scale(0.3) rotate(-30deg)}
@@ -132,7 +122,7 @@ to{opacity:1;transform:scale(1) rotate(0deg)}
 }
 
 .gear-bg{
-width:160px;height:160px;
+width:180px;height:180px;
 border-radius:2rem;
 background:var(–card);
 border:1px solid var(–border);
@@ -147,11 +137,13 @@ position:absolute;inset:0;
 background:radial-gradient(circle at 50% 50%,rgba(40,142,69,0.08) 0%,transparent 70%);
 }
 
+/* Gear animations */
 @keyframes spinCW  {from{transform:rotate(0deg)}  to{transform:rotate(360deg)}}
 @keyframes spinCCW {from{transform:rotate(0deg)}  to{transform:rotate(-360deg)}}
 #g-big  {animation:spinCW  7s linear infinite;}
 #g-small{animation:spinCCW 4s linear infinite;}
 
+/* wrench floating */
 .wrench-wrap{
 position:absolute;
 top:-12px;right:-12px;
@@ -210,7 +202,7 @@ animation:dotBlink 1.5s ease-in-out infinite;
 
 .page-title{
 font-family:var(–font-mono);
-font-size:clamp(1.5rem,6vw,2.8rem);
+font-size:clamp(1.8rem,6vw,2.8rem);
 font-weight:700;
 color:var(–fg);
 line-height:1.15;
@@ -223,10 +215,9 @@ background:var(–grad-accent);
 }
 
 .page-desc{
-font-size:0.9rem;color:var(–muted-fg);
+font-size:0.95rem;color:var(–muted-fg);
 line-height:1.75;margin-bottom:2rem;
 opacity:0;animation:fadeUp 0.6s ease 1s forwards;
-max-width:400px;
 }
 
 /* ── Progress bar ── */
@@ -271,7 +262,6 @@ background:var(–secondary);
 border:1px solid transparent;
 font-family:var(–font-mono);font-size:0.72rem;
 transition:border-color 0.3s;
-text-align:left;
 }
 .task.done{border-color:rgba(40,142,69,0.3);color:var(–muted-fg);}
 .task.active{border-color:var(–primary);color:var(–fg);}
@@ -291,12 +281,9 @@ animation:spin 0.8s linear infinite;
 display:flex;gap:0.5rem;
 width:100%;max-width:360px;
 opacity:0;animation:fadeUp 0.6s ease 1.35s forwards;
-/* Stack vertically on mobile */
-flex-wrap:wrap;
 }
 .notify-input{
 flex:1;
-min-width:0; /* prevent overflow */
 padding:0.65rem 1rem;
 border-radius:0.5rem;
 background:var(–secondary);
@@ -315,7 +302,7 @@ background:var(–grad-accent);
 color:#fff;
 font-family:var(–font-mono);font-size:0.78rem;font-weight:600;
 border:none;cursor:pointer;
-display:flex;align-items:center;justify-content:center;gap:0.4rem;
+display:flex;align-items:center;gap:0.4rem;
 transition:transform 0.2s,box-shadow 0.2s;
 white-space:nowrap;
 box-shadow:0 4px 16px rgba(40,142,69,0.25);
@@ -325,22 +312,15 @@ box-shadow:0 4px 16px rgba(40,142,69,0.25);
 
 /* ── Footer status ── */
 .status-bar{
-position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
 display:flex;align-items:center;gap:0.5rem;
-padding:0.45rem 0.9rem;
+padding:0.5rem 1.1rem;
 background:var(–card);border:1px solid var(–border);border-radius:9999px;
-font-family:var(–font-mono);font-size:0.6rem;color:var(–muted-fg);
+font-family:var(–font-mono);font-size:0.65rem;color:var(–muted-fg);
 opacity:0;animation:fadeUp 0.5s ease 1.6s forwards;
 white-space:nowrap;
-/* Prevent overflow on very small screens */
-max-width:calc(100vw - 2rem);
-overflow:hidden;
-}
-.status-bar span.status-label{
-overflow:hidden;text-overflow:ellipsis;
 }
 .status-dot-yellow{
-flex-shrink:0;
 width:6px;height:6px;background:#f59e0b;border-radius:50%;
 animation:dotBlink 1.5s ease-in-out infinite;
 }
@@ -348,64 +328,6 @@ animation:dotBlink 1.5s ease-in-out infinite;
 @keyframes fadeUp{
 from{opacity:0;transform:translateY(16px)}
 to{opacity:1;transform:translateY(0)}
-}
-
-/* ── Mobile breakpoints ── */
-@media (max-width: 480px) {
-.content {
-padding: 4.5rem 1rem 5.5rem;
-}
-
-.gear-scene {
-width: 130px;
-height: 130px;
-margin-bottom: 1.5rem;
-}
-.gear-bg {
-width: 130px;
-height: 130px;
-border-radius: 1.5rem;
-}
-
-.page-title {
-font-size: 1.6rem;
-}
-
-.page-desc {
-font-size: 0.85rem;
-line-height: 1.65;
-/* remove <br> effect on tiny screens */
-margin-bottom: 1.5rem;
-}
-
-.badge-pill {
-font-size: 0.65rem;
-padding: 0.3rem 0.8rem;
-}
-
-/* Stack notify form vertically */
-.notify-row {
-flex-direction: column;
-}
-.notify-btn {
-width: 100%;
-}
-
-/* Shorten status bar text on tiny screens */
-.status-eta { display: none; }
-
-.tasks {
-max-width: 100%;
-}
-.progress-wrap {
-max-width: 100%;
-}
-}
-
-@media (max-width: 360px) {
-.page-title { font-size: 1.35rem; }
-.gear-scene { width: 110px; height: 110px; }
-.gear-bg { width: 110px; height: 110px; }
 }
 </style>
 
@@ -430,12 +352,15 @@ max-width: 100%;
 
   <div class="gear-scene">
     <div class="gear-bg">
-      <svg id="gear-svg" width="120" height="120" viewBox="0 0 140 140" fill="none">
+      <!-- Gears drawn with JS into canvas-like SVG for clean teeth -->
+      <svg id="gear-svg" width="140" height="140" viewBox="0 0 140 140" fill="none">
+        <!-- Big gear group, spins clockwise, center 58,65 -->
         <g id="g-big" style="transform-origin:58px 65px;animation:spinCW 7s linear infinite;">
           <path id="big-gear-path" fill="#1e3a2a" stroke="#288e45" stroke-width="1.5" stroke-linejoin="round"/>
           <circle cx="58" cy="65" r="10" fill="#0d1117" stroke="#288e45" stroke-width="1.5"/>
           <circle cx="58" cy="65" r="3" fill="#288e45"/>
         </g>
+        <!-- Small gear group, spins counter-clockwise, center 91,82 -->
         <g id="g-small" style="transform-origin:91px 82px;animation:spinCCW 4s linear infinite;">
           <path id="small-gear-path" fill="#162b20" stroke="#2ea566" stroke-width="1.5" stroke-linejoin="round"/>
           <circle cx="91" cy="82" r="6" fill="#0d1117" stroke="#2ea566" stroke-width="1.5"/>
@@ -466,7 +391,7 @@ max-width: 100%;
 
   <h1 class="page-title">We're upgrading<br/><span>Bright Icons</span></h1>
   <p class="page-desc">
-    Our team is currently working on improvements.
+    Our team is currently working on improvements.<br/>
     We'll be back shortly with something even better.
   </p>
 
@@ -514,30 +439,22 @@ max-width: 100%;
     </div>
   </div>
 
-  <div class="notify-row">
-    <input class="notify-input" type="email" placeholder="your@email.com"/>
-    <button class="notify-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Notify me
-    </button>
-  </div>
-
 </div>
 
 <div class="status-bar">
   <div class="status-dot-yellow"></div>
-  <span class="status-label">Maintenance<span class="status-eta"> · ETA ~2 hours · bright-icons.netlify.app</span></span>
+  Maintenance · ETA ~2 hours · bright-icons.netlify.app
 </div>
 
 <script>
+// Draw proper gear teeth via math
 function gearPath(cx, cy, teeth, R, r, holeR) {
   const step = (Math.PI * 2) / teeth;
   const toothW = step * 0.3;
   let d = '';
   for (let i = 0; i < teeth; i++) {
     const a = step * i - Math.PI / 2;
+    // valley -> tooth -> valley
     const a0 = a - step/2 + toothW/2;
     const a1 = a - toothW/2;
     const a2 = a + toothW/2;
@@ -549,6 +466,7 @@ function gearPath(cx, cy, teeth, R, r, holeR) {
     d += `L${cx+r*Math.cos(a3)},${cy+r*Math.sin(a3)}`;
   }
   d += 'Z';
+  // Inner hole (counter-clockwise cutout)
   const steps = 48;
   d += ` M${cx+holeR},${cy}`;
   for(let i=1;i<=steps;i++){
@@ -559,8 +477,11 @@ function gearPath(cx, cy, teeth, R, r, holeR) {
   return d;
 }
 
-document.getElementById('big-gear-path').setAttribute('d', gearPath(58,65,12,30,23,12));
-document.getElementById('small-gear-path').setAttribute('d', gearPath(91,82,8,18,13,7));
+document.getElementById('big-gear-path').setAttribute('d',
+  gearPath(58, 65, 12, 30, 23, 12));
+document.getElementById('small-gear-path').setAttribute('d',
+  gearPath(91, 82, 8, 18, 13, 7));
+
 
 const c = document.getElementById('particles');
 for(let i=0;i<20;i++){
@@ -570,6 +491,7 @@ for(let i=0;i<20;i++){
   c.appendChild(p);
 }
 
+// Animate percent counter
 const pct=document.getElementById('pct');
 let v=0;
 setTimeout(()=>{
@@ -579,6 +501,7 @@ setTimeout(()=>{
     if(v>=73)clearInterval(iv);
   },25);
 },1500);
+
 </script>
 
 </body>
