@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Development | Bright Icons</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/config.js"></script>
+  <style>
+    /* Centered construction wrapper */
+    .construction-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0;
+    }
+
+    .icon-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    /* Animated construction icon */
+    .construction-icon {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 12px rgba(40, 142, 69, 0.6));
+    animation:
+        iconTilt 3s ease-in-out infinite,
+        iconPulse 3s ease-in-out infinite;
+    transform-origin: center center;
+    }
+
+    /* Glow behind the icon */
+    .icon-glow {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(40, 142, 69, 0.35), transparent 70%);
+    filter: blur(20px);
+    z-index: 1;
+    animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    /* Animations */
+    @keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50%     { transform: scale(1.06); }
+    }
+
+    @keyframes iconTilt {
+    0%   { transform: rotateZ(-6deg); }
+    25%  { transform: rotateZ(-3deg); }
+    50%  { transform: rotateZ(6deg); }
+    75%  { transform: rotateZ(3deg); }
+    100% { transform: rotateZ(-6deg); }
+    }
+
+    @keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.95;
+        transform: scale(1.18);
+    }
+    }
+
+    @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%     { transform: translateY(-12px); }
+    }
+
+    /* Apply floating */
+    .animate-float {
+    animation: float 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="index-page">
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#288e45" />
+        <rect x="5" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="13" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="21" y="5" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="5" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="21" y="13" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="5" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="13" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
+        <rect x="21" y="21" width="6" height="6" rx="1.5" fill="#ffffff" />
+      </svg>
+      Bright Icons
+    </a>
+
+    <div class="nav-links">
+      <a href="editor.html" class="nav-btn">Open Editor</a>
+      <a href="under-development.html" class="nav-btn">Gallery</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="hero">
+    <div class="hero-badge animate-pulse-glow">Work in Progress</div>
+
+    <h1>Under Development</h1>
+    <p>
+      This section is being built with care and precision.
+      New features and content are on the way — stay tuned.
+    </p>
+
+    <a href="javascript:history.back()" class="hero-cta">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Go Back
+    </a>
+  </main>
+
+  <!-- Big Animated Construction Visual (Centered, Glow + Tilt) -->
+  <div class="construction-wrapper">
+    <div class="icon-container animate-float">
+      <div class="icon-glow"></div>
+      <svg class="construction-icon" xmlns="http://www.w3.org/2000/svg"
+           width="160" height="160" viewBox="0 0 24 24"
+           fill="none"
+           stroke="#288e45"
+           stroke-width="2.2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    </div>
+  </div>
+  <br>
+  <br>
+  <!-- Features -->
+  <section class="features">
+    <div class="feature-card glass-panel hover-lift">
+      <div class="feature-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <h3>Modern Design</h3>
+      <p>Sleek interfaces built for usability and aesthetics.</p>
+    </div>
+
+    <div class="feature-card glass-panel hover-lift">
+      <div class="feature-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <h3>Optimized</h3>
+      <p>Fast and responsive performance.</p>
+    </div>
+
+    <div class="feature-card glass-panel hover-lift">
+      <div class="feature-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6M12 18v4M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M18 12h4M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
+        </svg>
+      </div>
+      <h3>Innovative</h3>
+      <p>New ideas and features in active development.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 Niko Marinović. All rights reserved.</p>
+    <br>
+    <a href="https://github.com/nikomarinovic" target="_blank" rel="noopener noreferrer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.11.78-.25.78-.56v-2.02c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.68 5.41-5.23 5.7.41.36.77 1.08.77 2.18v3.23c0 .31.21.68.79.56A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5z"/>
+      </svg>
+    </a>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Bright Icons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--fg:#c9d1d9;--card:#161b22;--primary:#288e45;
+  --secondary:#21262d;--muted:#30363d;--muted-fg:#6e7681;--border:#30363d;
+  --danger:#dc2626;--warn:#ca8a04;
+  --font-mono:'JetBrains Mono',monospace;--font-body:'Inter',sans-serif;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Background ── */
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(40,142,69,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(40,142,69,0.04) 1px,transparent 1px);background-size:40px 40px;animation:gridDrift 20s linear infinite;pointer-events:none;z-index:0;}
+@keyframes gridDrift{0%{transform:translate(0,0)}100%{transform:translate(40px,40px)}}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(40,142,69,0.1) 0%,transparent 70%);top:-100px;left:-100px;}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(46,165,102,0.07) 0%,transparent 70%);bottom:-80px;right:-80px;}
+
+/* ══════════════════════════════════════════
+   LOCK SCREEN
+══════════════════════════════════════════ */
+#lock-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.lock-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:2.5rem 2rem;width:100%;max-width:400px;
+  display:flex;flex-direction:column;align-items:center;gap:1.25rem;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.lock-icon{
+  width:56px;height:56px;background:rgba(40,142,69,0.12);border:1px solid rgba(40,142,69,0.3);
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  color:var(--primary);
+}
+.lock-title{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:var(--fg);text-align:center;}
+.lock-sub{font-size:.75rem;color:var(--muted-fg);text-align:center;line-height:1.5;}
+.lock-input{
+  width:100%;padding:.7rem .9rem;
+  background:var(--secondary);border:1px solid var(--border);border-radius:8px;
+  color:var(--fg);font-family:var(--font-mono);font-size:.82rem;
+  outline:none;transition:border-color .2s;letter-spacing:.05em;
+}
+.lock-input:focus{border-color:rgba(40,142,69,0.5);}
+.lock-btn{
+  width:100%;padding:.7rem;border-radius:8px;
+  background:var(--primary);color:#fff;
+  font-family:var(--font-mono);font-size:.8rem;font-weight:600;
+  cursor:pointer;border:none;transition:background .2s,transform .1s;
+}
+.lock-btn:hover{background:#2ea566;}
+.lock-btn:active{transform:scale(.98);}
+.lock-err{
+  font-family:var(--font-mono);font-size:.7rem;color:#f87171;
+  text-align:center;padding:.5rem .75rem;
+  background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.25);
+  border-radius:6px;width:100%;display:none;
+}
+.lock-err.show{display:block;}
+.trust-row{display:flex;align-items:center;gap:.5rem;font-size:.7rem;color:var(--muted-fg);}
+.trust-row input{accent-color:var(--primary);}
+
+/* Restricted (wrong device) */
+#restricted-screen{
+  position:fixed;inset:0;z-index:9998;
+  background:var(--bg);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.restricted-card{
+  background:var(--card);border:1px solid rgba(220,38,38,0.3);border-radius:14px;
+  padding:2.5rem 2rem;width:100%;max-width:400px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+}
+.restricted-icon{width:56px;height:56px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#f87171;}
+.restricted-title{font-family:var(--font-mono);font-size:1rem;font-weight:700;color:#f87171;}
+.restricted-sub{font-size:.73rem;color:var(--muted-fg);line-height:1.6;}
+.restricted-code{font-family:var(--font-mono);font-size:.65rem;color:var(--muted-fg);background:var(--secondary);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;letter-spacing:.05em;}
+
+/* ══════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════ */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 1.5rem;
+  background:rgba(13,17,23,0.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:.6rem;font-family:var(--font-mono);font-size:.88rem;font-weight:600;color:var(--fg);text-decoration:none;transition:color .2s;}
+.logo:hover{color:var(--primary)}
+.topbar-right{display:flex;align-items:center;gap:.75rem;}
+.admin-badge{
+  font-family:var(--font-mono);font-size:.65rem;font-weight:600;
+  color:var(--primary);background:rgba(40,142,69,0.12);
+  border:1px solid rgba(40,142,69,0.3);padding:.25rem .6rem;border-radius:20px;
+}
+.logout-btn{
+  font-family:var(--font-mono);font-size:.68rem;padding:.3rem .7rem;
+  background:transparent;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted-fg);cursor:pointer;transition:all .2s;
+}
+.logout-btn:hover{border-color:rgba(220,38,38,0.4);color:#f87171;}
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+.admin-layout{
+  position:relative;z-index:1;flex:1;
+  display:grid;grid-template-columns:220px 1fr;
+  max-width:1400px;width:100%;margin:0 auto;
+  padding:1.5rem;gap:1.5rem;
+}
+
+/* ── Sidebar nav ── */
+.admin-nav{
+  display:flex;flex-direction:column;gap:.25rem;
+  position:sticky;top:72px;align-self:start;
+}
+.nav-item{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.6rem .8rem;border-radius:8px;
+  font-family:var(--font-mono);font-size:.73rem;font-weight:500;
+  color:var(--muted-fg);cursor:pointer;
+  border:1px solid transparent;
+  transition:all .15s;user-select:none;
+}
+.nav-item:hover{color:var(--fg);background:var(--secondary);}
+.nav-item.active{color:var(--fg);background:var(--secondary);border-color:var(--border);}
+.nav-item.active .nav-dot{background:var(--primary);}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .15s;}
+.nav-divider{height:1px;background:var(--border);margin:.5rem 0;}
+.nav-section-lbl{font-family:var(--font-mono);font-size:.6rem;font-weight:600;color:var(--muted-fg);padding:.25rem .8rem;text-transform:uppercase;letter-spacing:.08em;}
+
+/* ── Panels ── */
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* ── Section cards ── */
+.sec{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1.25rem;margin-bottom:1rem;
+}
+.sec-title{
+  font-family:var(--font-mono);font-size:.78rem;font-weight:700;color:var(--fg);
+  margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;
+}
+.sec-title svg{color:var(--primary);}
+
+/* ── Form elements ── */
+.field{margin-bottom:.85rem;}
+.field-lbl{
+  font-family:var(--font-mono);font-size:.67rem;font-weight:600;
+  color:var(--muted-fg);margin-bottom:.35rem;display:block;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.inp{
+  width:100%;padding:.6rem .8rem;
+  background:var(--secondary);border:1px solid var(--border);border-radius:7px;
+  color:var(--fg);font-family:var(--font-mono);font-size:.78rem;
+  outline:none;transition:border-color .2s;
+}
+.inp:focus{border-color:rgba(40,142,69,0.5);}
+.inp::placeholder{color:var(--muted-fg);}
+textarea.inp{resize:vertical;min-height:100px;font-size:.72rem;line-height:1.5;}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.55rem 1rem;border-radius:7px;
+  font-family:var(--font-mono);font-size:.73rem;font-weight:600;
+  cursor:pointer;border:none;transition:all .15s;
+}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:#2ea566;}
+.btn-secondary{background:var(--secondary);color:var(--fg);border:1px solid var(--border);}
+.btn-secondary:hover{background:var(--muted);border-color:rgba(40,142,69,0.3);}
+.btn-danger{background:rgba(220,38,38,0.1);color:#f87171;border:1px solid rgba(220,38,38,0.25);}
+.btn-danger:hover{background:rgba(220,38,38,0.2);}
+.btn-sm{padding:.35rem .65rem;font-size:.65rem;}
+.btn-block{width:100%;}
+
+/* ── Preview box ── */
+.preview-box{
+  background:var(--secondary);border:1px solid var(--border);border-radius:8px;
+  min-height:120px;display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+  color:var(--fg);overflow:hidden;
+}
+.preview-box svg{max-width:80px;max-height:80px;overflow:visible;}
+.preview-placeholder{color:var(--muted-fg);font-family:var(--font-mono);font-size:.7rem;text-align:center;}
+
+/* ── Icon list ── */
+.icon-list{display:flex;flex-direction:column;gap:.5rem;}
+.icon-row{
+  display:flex;align-items:center;gap:.75rem;
+  background:var(--secondary);border:1px solid var(--border);border-radius:8px;
+  padding:.6rem .85rem;
+  transition:border-color .2s;
+}
+.icon-row:hover{border-color:rgba(40,142,69,0.3);}
+.icon-row-thumb{
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fg);flex-shrink:0;
+}
+.icon-row-thumb svg{width:22px;height:22px;overflow:visible;}
+.icon-row-name{font-family:var(--font-mono);font-size:.73rem;flex:1;color:var(--fg);}
+.icon-row-acts{display:flex;gap:.35rem;flex-shrink:0;}
+
+/* ── Config toggles ── */
+.config-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 0;border-bottom:1px solid var(--border);gap:1rem;
+}
+.config-row:last-child{border-bottom:none;}
+.config-info{flex:1;}
+.config-key{font-family:var(--font-mono);font-size:.75rem;font-weight:600;color:var(--fg);}
+.config-desc{font-family:var(--font-mono);font-size:.63rem;color:var(--muted-fg);margin-top:.15rem;}
+.toggle{
+  width:38px;height:21px;border-radius:11px;
+  background:var(--muted);border:none;cursor:pointer;
+  position:relative;transition:background .2s;flex-shrink:0;
+}
+.toggle.on{background:var(--primary);}
+.toggle::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:15px;height:15px;border-radius:50%;background:#fff;
+  transition:transform .2s;
+}
+.toggle.on::after{transform:translateX(17px);}
+.config-input-wrap{display:flex;align-items:center;gap:.5rem;}
+.config-num-inp{
+  width:70px;padding:.35rem .5rem;
+  background:var(--secondary);border:1px solid var(--border);border-radius:6px;
+  color:var(--fg);font-family:var(--font-mono);font-size:.73rem;
+  outline:none;text-align:center;
+}
+.config-num-inp:focus{border-color:rgba(40,142,69,0.5);}
+
+/* ── GitHub section ── */
+.gh-status{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:var(--font-mono);font-size:.7rem;
+  padding:.5rem .8rem;border-radius:6px;
+  background:var(--secondary);border:1px solid var(--border);
+  margin-bottom:.75rem;
+}
+.gh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.gh-dot.ok{background:#4ade80;box-shadow:0 0 6px #4ade80;}
+.gh-dot.err{background:#f87171;}
+.gh-dot.idle{background:var(--muted-fg);}
+
+/* ── Edit modal ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  width:100%;max-width:560px;padding:1.5rem;
+  display:flex;flex-direction:column;gap:1rem;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:var(--font-mono);font-size:.85rem;font-weight:700;color:var(--fg);}
+.modal-close{background:none;border:none;color:var(--muted-fg);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:4px;transition:color .2s;}
+.modal-close:hover{color:var(--fg);}
+.modal-footer{display:flex;gap:.5rem;justify-content:flex-end;}
+
+/* ── Toast ── */
+#toast{
+  position:fixed;bottom:1.5rem;right:1.5rem;
+  background:var(--card);border:1px solid rgba(40,142,69,0.4);color:var(--fg);
+  padding:.6rem 1.1rem;border-radius:8px;
+  font-family:var(--font-mono);font-size:.72rem;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  opacity:0;pointer-events:none;transform:translateY(8px);
+  transition:opacity .2s,transform .2s;z-index:999;
+  display:flex;align-items:center;gap:.5rem;
+}
+#toast.show{opacity:1;transform:translateY(0);}
+#toast.error{border-color:rgba(220,38,38,0.4);}
+#toast.error svg{stroke:#f87171;}
+
+@media(max-width:900px){
+  .admin-layout{grid-template-columns:1fr;padding:1rem;}
+  .admin-nav{position:static;flex-direction:row;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem;}
+  .nav-section-lbl,.nav-divider{display:none;}
+  .nav-item{padding:.45rem .7rem;font-size:.68rem;}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ══ LOCK SCREEN ══ -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <div class="lock-title">Bright Icons Admin</div>
+    <div class="lock-sub">Restricted access. Enter your admin token to continue.</div>
+    <input id="token-input" class="lock-input" type="password" placeholder="Admin token…" autocomplete="off"/>
+    <div class="trust-row">
+      <input type="checkbox" id="trust-device" checked/>
+      <label for="trust-device">Trust this device for 30 days</label>
+    </div>
+    <button class="lock-btn" onclick="attemptLogin()">Unlock →</button>
+    <div class="lock-err" id="lock-err">Incorrect token. Access denied.</div>
+  </div>
+</div>
+
+<!-- ══ RESTRICTED SCREEN ══ -->
+<div id="restricted-screen">
+  <div class="restricted-card">
+    <div class="restricted-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    </div>
+    <div class="restricted-title">Restricted Access</div>
+    <div class="restricted-sub">This page is only accessible from trusted admin devices. Your device fingerprint is not recognised.</div>
+    <div class="restricted-code" id="fp-display">Fingerprint: computing…</div>
+    <button class="lock-btn" style="margin-top:.5rem" onclick="showLockScreen()">Enter Token →</button>
+    <a href="index.html" style="font-family:var(--font-mono);font-size:.68rem;color:var(--muted-fg);text-decoration:none;margin-top:.25rem;">← Back to site</a>
+  </div>
+</div>
+
+<!-- ══ TOPBAR ══ -->
+<nav class="topbar" id="main-topbar" style="display:none">
+  <a class="logo" href="index.html">
+    <svg viewBox="0 0 28 28" width="22" height="22" fill="none">
+      <rect width="28" height="28" rx="7" fill="#288e45"/>
+      <rect x="4"    y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="11.5" y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="19"   y="4"    width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="4"    y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="11.5" y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="19"   y="11.5" width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="4"    y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="11.5" y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+      <rect x="19"   y="19"   width="5" height="5" rx="1.3" fill="#fff"/>
+    </svg>
+    Bright Icons
+  </a>
+  <div class="topbar-right">
+    <div class="admin-badge">⚡ Admin</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ══ ADMIN LAYOUT ══ -->
+<div class="admin-layout" id="admin-layout" style="display:none">
+
+  <!-- Sidebar -->
+  <aside>
+    <nav class="admin-nav">
+      <div class="nav-section-lbl">Icons</div>
+      <div class="nav-item active" data-panel="upload" onclick="switchPanel('upload',this)">
+        <div class="nav-dot"></div>Upload Icon
+      </div>
+      <div class="nav-item" data-panel="manage" onclick="switchPanel('manage',this)">
+        <div class="nav-dot"></div>Manage Icons
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-section-lbl">Settings</div>
+      <div class="nav-item" data-panel="config" onclick="switchPanel('config',this)">
+        <div class="nav-dot"></div>Config
+      </div>
+      <div class="nav-item" data-panel="github" onclick="switchPanel('github',this)">
+        <div class="nav-dot"></div>GitHub
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-section-lbl">Security</div>
+      <div class="nav-item" data-panel="access" onclick="switchPanel('access',this)">
+        <div class="nav-dot"></div>Access
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Panels -->
+  <main>
+
+    <!-- ══ PANEL: Upload ══ -->
+    <div class="panel active" id="panel-upload">
+      <div class="sec">
+        <div class="sec-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+          Upload New Icon
+        </div>
+        <div class="field">
+          <label class="field-lbl">Icon Name</label>
+          <input id="up-name" class="inp" type="text" placeholder="e.g. Sparkle, Arrow Right…"/>
+        </div>
+        <div class="field">
+          <label class="field-lbl">SVG Code</label>
+          <textarea id="up-svg" class="inp" placeholder="<svg viewBox=&quot;0 0 24 24&quot;>…</svg>" oninput="updateUploadPreview()"></textarea>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Live Preview</label>
+          <div class="preview-box" id="up-preview">
+            <div class="preview-placeholder">Paste SVG above to preview</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-primary" onclick="uploadIcon()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            Save to Gallery
+          </button>
+          <button class="btn btn-secondary" onclick="clearUpload()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: Manage ══ -->
+    <div class="panel" id="panel-manage">
+      <div class="sec">
+        <div class="sec-title" style="justify-content:space-between">
+          <span style="display:flex;align-items:center;gap:.5rem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Gallery Icons
+          </span>
+          <button class="btn btn-secondary btn-sm" onclick="loadManagePanel()">↺ Refresh</button>
+        </div>
+        <div id="manage-list" class="icon-list">
+          <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--muted-fg);padding:1rem;text-align:center">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: Config ══ -->
+    <div class="panel" id="panel-config">
+      <div class="sec">
+        <div class="sec-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12.483 20.935c-.862.239-1.898-.178-2.158-1.252a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.08.262 1.496 1.308 1.247 2.173"/></svg>
+          Site Configuration
+        </div>
+        <div id="config-rows"></div>
+        <div style="margin-top:1rem;display:flex;gap:.5rem;">
+          <button class="btn btn-primary" onclick="saveConfig()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Save Config
+          </button>
+          <button class="btn btn-secondary" onclick="loadConfig()">↺ Reset</button>
+        </div>
+        <div style="margin-top:.75rem;padding:.6rem .75rem;background:rgba(202,138,4,0.08);border:1px solid rgba(202,138,4,0.25);border-radius:6px;">
+          <span style="font-family:var(--font-mono);font-size:.65rem;color:#fde047;">
+            ⚠ Saving config updates <code>js/config.js</code> via GitHub. Make sure GitHub is connected.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: GitHub ══ -->
+    <div class="panel" id="panel-github">
+      <div class="sec">
+        <div class="sec-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub Integration
+        </div>
+        <div class="gh-status" id="gh-status">
+          <div class="gh-dot idle" id="gh-dot"></div>
+          <span id="gh-status-text">Not connected</span>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Personal Access Token</label>
+          <input id="gh-token" class="inp" type="password" placeholder="ghp_…" autocomplete="off"/>
+          <div style="font-family:var(--font-mono);font-size:.63rem;color:var(--muted-fg);margin-top:.35rem;">
+            Needs <code>repo</code> scope. Stored in localStorage on this device only.
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Repository (owner/repo)</label>
+          <input id="gh-repo" class="inp" type="text" placeholder="yourname/bright-icons"/>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Branch</label>
+          <input id="gh-branch" class="inp" type="text" placeholder="main"/>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="saveGhConfig()">Save & Test Connection</button>
+          <button class="btn btn-secondary" onclick="testGhConnection()">Test Only</button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Quick Actions</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <button class="btn btn-secondary btn-block" onclick="ghToggleMaintenance()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Toggle Maintenance Mode
+          </button>
+          <button class="btn btn-secondary btn-block" onclick="ghToggleMobile()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            Toggle Mobile Redirect
+          </button>
+          <button class="btn btn-secondary btn-block" onclick="ghPushGallery()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Push gallery-icons.json to GitHub
+          </button>
+        </div>
+        <div id="gh-action-log" style="margin-top:.75rem;font-family:var(--font-mono);font-size:.65rem;color:var(--muted-fg);line-height:1.7;min-height:1.5rem;"></div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: Access ══ -->
+    <div class="panel" id="panel-access">
+      <div class="sec">
+        <div class="sec-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Access Control
+        </div>
+        <div class="config-row">
+          <div class="config-info">
+            <div class="config-key">Admin Token</div>
+            <div class="config-desc">Change your admin password / token</div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:.75rem">
+          <label class="field-lbl">New Token</label>
+          <input id="new-token-inp" class="inp" type="password" placeholder="Enter new token…"/>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Confirm Token</label>
+          <input id="confirm-token-inp" class="inp" type="password" placeholder="Confirm new token…"/>
+        </div>
+        <button class="btn btn-primary" onclick="changeToken()">Update Token</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Trusted Devices</div>
+        <div id="trusted-list" style="font-family:var(--font-mono);font-size:.72rem;color:var(--muted-fg);">
+          Loading…
+        </div>
+        <button class="btn btn-danger btn-sm" style="margin-top:.75rem" onclick="revokeAllDevices()">Revoke All Trusted Devices</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Current Session</div>
+        <div style="font-family:var(--font-mono);font-size:.7rem;color:var(--muted-fg);line-height:1.8;">
+          <div>Device fingerprint: <span id="session-fp" style="color:var(--fg)">—</span></div>
+          <div>Session started: <span id="session-time" style="color:var(--fg)">—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- ══ EDIT MODAL ══ -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Edit Icon</div>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="field">
+      <label class="field-lbl">Name</label>
+      <input id="edit-name" class="inp" type="text"/>
+    </div>
+    <div class="field">
+      <label class="field-lbl">SVG Code</label>
+      <textarea id="edit-svg" class="inp" style="min-height:120px" oninput="updateEditPreview()"></textarea>
+    </div>
+    <div class="field">
+      <label class="field-lbl">Preview</label>
+      <div class="preview-box" id="edit-preview">
+        <div class="preview-placeholder">Preview</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" id="toast-icon"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Done</span>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════
+   AUTH — Device fingerprint + token
+════════════════════════════════════════════════ */
+
+// ── Fingerprint ──────────────────────────────
+async function getFingerprint() {
+  const parts = [
+    navigator.userAgent,
+    navigator.language,
+    screen.colorDepth,
+    screen.width + 'x' + screen.height,
+    new Date().getTimezoneOffset(),
+    navigator.hardwareConcurrency || '',
+    navigator.platform || '',
+  ].join('|');
+  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('').slice(0,24);
+}
+
+const STORAGE_TOKEN_KEY    = 'bi_admin_token';
+const STORAGE_TRUSTED_KEY  = 'bi_trusted_devices';
+const STORAGE_SESSION_KEY  = 'bi_session';
+const DEFAULT_TOKEN        = 'bright-admin-2025'; // ← CHANGE THIS
+
+function getStoredToken()   { return localStorage.getItem(STORAGE_TOKEN_KEY) || DEFAULT_TOKEN; }
+function getTrustedDevices(){ try { return JSON.parse(localStorage.getItem(STORAGE_TRUSTED_KEY) || '[]'); } catch { return []; } }
+function saveTrustedDevice(fp) {
+  const trusted = getTrustedDevices();
+  const now     = Date.now();
+  const exists  = trusted.find(d => d.fp === fp);
+  if (!exists) {
+    trusted.push({ fp, added: now, expires: now + 30 * 86400_000 });
+    localStorage.setItem(STORAGE_TRUSTED_KEY, JSON.stringify(trusted));
+  }
+}
+function isDeviceTrusted(fp) {
+  const now = Date.now();
+  const trusted = getTrustedDevices().filter(d => d.expires > now);
+  localStorage.setItem(STORAGE_TRUSTED_KEY, JSON.stringify(trusted));
+  return trusted.some(d => d.fp === fp);
+}
+
+// ── Boot ─────────────────────────────────────
+async function bootAuth() {
+  const fp = await getFingerprint();
+  document.getElementById('fp-display').textContent = 'Fingerprint: ' + fp;
+  document.getElementById('session-fp').textContent = fp;
+
+  // Already has a live session token in sessionStorage?
+  const sess = sessionStorage.getItem(STORAGE_SESSION_KEY);
+  if (sess === 'authenticated') { showAdmin(); return; }
+
+  // Trusted device?
+  if (isDeviceTrusted(fp)) { sessionStorage.setItem(STORAGE_SESSION_KEY, 'authenticated'); showAdmin(); return; }
+
+  // Unknown device — show restricted screen first, let them enter token
+  document.getElementById('restricted-screen').style.display = 'flex';
+  document.getElementById('lock-screen').style.display = 'none';
+}
+
+window._currentFp = null;
+getFingerprint().then(fp => { window._currentFp = fp; });
+
+function showLockScreen() {
+  document.getElementById('restricted-screen').style.display = 'none';
+  document.getElementById('lock-screen').style.display = 'flex';
+  setTimeout(() => document.getElementById('token-input').focus(), 100);
+}
+
+function attemptLogin() {
+  const val    = document.getElementById('token-input').value.trim();
+  const correct = getStoredToken();
+  const err    = document.getElementById('lock-err');
+  if (val === correct) {
+    err.classList.remove('show');
+    const trust = document.getElementById('trust-device').checked;
+    if (trust && window._currentFp) saveTrustedDevice(window._currentFp);
+    sessionStorage.setItem(STORAGE_SESSION_KEY, 'authenticated');
+    showAdmin();
+  } else {
+    err.classList.add('show');
+    document.getElementById('token-input').value = '';
+    document.getElementById('token-input').focus();
+  }
+}
+document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+
+function showAdmin() {
+  document.getElementById('lock-screen').style.display = 'none';
+  document.getElementById('restricted-screen').style.display = 'none';
+  document.getElementById('main-topbar').style.display = 'flex';
+  document.getElementById('admin-layout').style.display = 'grid';
+  document.getElementById('session-time').textContent = new Date().toLocaleTimeString();
+  loadAllPanels();
+}
+
+function logout() {
+  sessionStorage.removeItem(STORAGE_SESSION_KEY);
+  location.reload();
+}
+
+/* ════════════════════════════════════════════════
+   PANEL SWITCHING
+════════════════════════════════════════════════ */
+function switchPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'manage')  loadManagePanel();
+  if (id === 'config')  loadConfig();
+  if (id === 'github')  loadGhPanel();
+  if (id === 'access')  loadAccessPanel();
+}
+
+function loadAllPanels() {
+  loadConfig();
+  loadGhPanel();
+  loadAccessPanel();
+}
+
+/* ════════════════════════════════════════════════
+   SVG UTILITY
+════════════════════════════════════════════════ */
+function cleanSvg(svgStr, size) {
+  if (!svgStr) return '';
+  let s = svgStr.replace(/stroke-\s+/g, '');
+  if (!s.includes('stroke-width')) s = s.replace(/<svg/, '<svg stroke-width="2"');
+  s = s.replace(/<svg([^>]*)>/, (_, a) => {
+    a = a.replace(/\s*width="[^"]*"/, '').replace(/\s*height="[^"]*"/, '');
+    return `<svg${a} width="${size}" height="${size}" style="overflow:visible">`;
+  });
+  return s;
+}
+function updateUploadPreview() {
+  const val = document.getElementById('up-svg').value.trim();
+  const box = document.getElementById('up-preview');
+  box.innerHTML = val ? cleanSvg(val, 72) : '<div class="preview-placeholder">Paste SVG above to preview</div>';
+}
+function updateEditPreview() {
+  const val = document.getElementById('edit-svg').value.trim();
+  const box = document.getElementById('edit-preview');
+  box.innerHTML = val ? cleanSvg(val, 72) : '<div class="preview-placeholder">Preview</div>';
+}
+function clearUpload() {
+  document.getElementById('up-name').value = '';
+  document.getElementById('up-svg').value  = '';
+  document.getElementById('up-preview').innerHTML = '<div class="preview-placeholder">Paste SVG above to preview</div>';
+}
+
+/* ════════════════════════════════════════════════
+   GALLERY ICONS DATA
+   Icons live in data/gallery-icons.json
+   We load/save them here. Without a backend,
+   saves go to GitHub via the API.
+════════════════════════════════════════════════ */
+let _icons = [];
+
+async function fetchIcons() {
+  const gh = getGhConfig();
+  // Prefer reading from GitHub API so we always have the latest + correct SHA
+  if (gh.token && gh.repo) {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${gh.repo}/contents/data/gallery-icons.json?ref=${gh.branch || 'main'}`,
+        { headers: { Authorization: 'Bearer ' + gh.token, 'X-GitHub-Api-Version': '2022-11-28' } }
+      );
+      if (res.ok) {
+        const d = await res.json();
+        // GitHub returns base64-encoded content
+        const decoded = decodeURIComponent(escape(atob(d.content.replace(/\n/g, ''))));
+        _icons = JSON.parse(decoded);
+        return _icons;
+      }
+      // 404 = file doesn't exist yet, that's fine — start empty
+      if (res.status === 404) { _icons = []; return _icons; }
+    } catch {}
+  }
+  // Fallback: try fetching the deployed file directly
+  try {
+    const res = await fetch('data/gallery-icons.json?v=' + Date.now());
+    if (res.ok) { _icons = await res.json(); return _icons; }
+  } catch {}
+  _icons = [];
+  return _icons;
+}
+
+/* ════════════════════════════════════════════════
+   UPLOAD ICON
+════════════════════════════════════════════════ */
+async function uploadIcon() {
+  const name = document.getElementById('up-name').value.trim();
+  const svg  = document.getElementById('up-svg').value.trim();
+  if (!name) { showToast('Enter an icon name', true); return; }
+  if (!svg || !svg.includes('<svg'))  { showToast('Paste valid SVG code', true); return; }
+
+  await fetchIcons();
+  _icons.push({ name, svg });
+  await pushIconsToGitHub();
+  clearUpload();
+  showToast('Icon saved — ' + name);
+}
+
+/* ════════════════════════════════════════════════
+   MANAGE PANEL
+════════════════════════════════════════════════ */
+async function loadManagePanel() {
+  await fetchIcons();
+  const list = document.getElementById('manage-list');
+  if (!_icons.length) {
+    list.innerHTML = '<div style="font-family:var(--font-mono);font-size:.72rem;color:var(--muted-fg);padding:1rem;text-align:center">No icons yet. Upload some above.</div>';
+    return;
+  }
+  list.innerHTML = _icons.map((ic, i) => `
+    <div class="icon-row">
+      <div class="icon-row-thumb">${cleanSvg(ic.svg, 22)}</div>
+      <div class="icon-row-name">${ic.name}</div>
+      <div class="icon-row-acts">
+        <button class="btn btn-secondary btn-sm" onclick="openEdit(${i})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteIcon(${i})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+let _editIdx = -1;
+function openEdit(i) {
+  _editIdx = i;
+  document.getElementById('edit-name').value = _icons[i].name;
+  document.getElementById('edit-svg').value  = _icons[i].svg;
+  updateEditPreview();
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
+async function saveEdit() {
+  const name = document.getElementById('edit-name').value.trim();
+  const svg  = document.getElementById('edit-svg').value.trim();
+  if (!name || !svg) { showToast('Name and SVG required', true); return; }
+  _icons[_editIdx] = { name, svg };
+  await pushIconsToGitHub();
+  closeEditModal();
+  loadManagePanel();
+  showToast('Icon updated');
+}
+async function deleteIcon(i) {
+  if (!confirm(`Delete "${_icons[i].name}"?`)) return;
+  _icons.splice(i, 1);
+  await pushIconsToGitHub();
+  loadManagePanel();
+  showToast('Icon deleted');
+}
+
+/* ════════════════════════════════════════════════
+   CONFIG PANEL
+════════════════════════════════════════════════ */
+// Local mirror of SITE_CONFIG values
+let _cfg = {};
+const CFG_DEFS = [
+  { key:'maintenance',      type:'bool',   label:'Maintenance Mode',    desc:'Redirects all visitors to maintenance.html' },
+  { key:'mobileRedirect',   type:'bool',   label:'Mobile Redirect',     desc:'Redirects mobile screens to mobile-not-ready.html' },
+  { key:'mobileBreakpoint', type:'number', label:'Mobile Breakpoint',   desc:'Min px width considered desktop',  unit:'px' },
+  { key:'disableRightClick',type:'bool',   label:'Disable Right Click', desc:'Blocks the context menu on all pages' },
+];
+
+function loadConfig() {
+  // Pull live values from the already-loaded SITE_CONFIG
+  try { _cfg = JSON.parse(JSON.stringify(window.SITE_CONFIG || {})); } catch { _cfg = {}; }
+  renderConfigRows();
+}
+
+function renderConfigRows() {
+  const container = document.getElementById('config-rows');
+  container.innerHTML = CFG_DEFS.map(def => {
+    const val = _cfg[def.key];
+    if (def.type === 'bool') {
+      return `<div class="config-row">
+        <div class="config-info">
+          <div class="config-key">${def.label}</div>
+          <div class="config-desc">${def.desc}</div>
+        </div>
+        <button class="toggle ${val ? 'on' : ''}" id="cfg-${def.key}" onclick="toggleCfg('${def.key}')"></button>
+      </div>`;
+    }
+    if (def.type === 'number') {
+      return `<div class="config-row">
+        <div class="config-info">
+          <div class="config-key">${def.label}</div>
+          <div class="config-desc">${def.desc}</div>
+        </div>
+        <div class="config-input-wrap">
+          <input class="config-num-inp" type="number" id="cfg-${def.key}" value="${val || ''}" onchange="_cfg['${def.key}']=+this.value"/>
+          ${def.unit ? `<span style="font-family:var(--font-mono);font-size:.65rem;color:var(--muted-fg)">${def.unit}</span>` : ''}
+        </div>
+      </div>`;
+    }
+    return '';
+  }).join('');
+}
+
+function toggleCfg(key) {
+  _cfg[key] = !_cfg[key];
+  const btn = document.getElementById('cfg-' + key);
+  if (btn) btn.classList.toggle('on', _cfg[key]);
+}
+
+async function saveConfig() {
+  // Build the new config.js content
+  const pages = (_cfg.pages || window.SITE_CONFIG?.pages || {});
+  const content = `/* ═══════════════════════════════════════════
+   Bright Icons — js/config.js
+   Site-wide feature flags.
+   Last saved: ${new Date().toISOString()}
+   ═══════════════════════════════════════════ */
+const SITE_CONFIG = {
+  maintenance:       ${!!_cfg.maintenance},
+  mobileRedirect:    ${!!_cfg.mobileRedirect},
+  mobileBreakpoint:  ${_cfg.mobileBreakpoint || 1024},
+  disableRightClick: ${!!_cfg.disableRightClick},
+  pages: {
+    maintenance:      '${pages.maintenance      || 'maintenance.html'}',
+    mobileWall:       '${pages.mobileWall       || 'mobile-not-ready.html'}',
+    notFound:         '${pages.notFound         || '404.html'}',
+    home:             '${pages.home             || 'index.html'}',
+    editor:           '${pages.editor           || 'editor.html'}',
+    gallery:          '${pages.gallery          || 'gallery.html'}',
+    underDevelopment: '${pages.underDevelopment || 'under-development.html'}',
+  },
+};
+/* ─────────────────────────────────────────
+   DO NOT EDIT BELOW THIS LINE
+───────────────────────────────────────── */
+(function(){
+  const cfg=SITE_CONFIG,path=window.location.pathname;
+  function isWallPage(){return path.endsWith(cfg.pages.maintenance)||path.endsWith(cfg.pages.mobileWall);}
+  if(cfg.maintenance&&!isWallPage()){window.location.replace(cfg.pages.maintenance);return;}
+  if(!cfg.maintenance&&path.endsWith(cfg.pages.maintenance)){window.location.replace(cfg.pages.home);return;}
+  if(cfg.mobileRedirect&&!isWallPage()){
+    const bypassed=sessionStorage.getItem('mobileBypass')==='true';
+    if(!bypassed){const isMobile=window.innerWidth<cfg.mobileBreakpoint||/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);if(isMobile){window.location.replace(cfg.pages.mobileWall);}}
+  }
+  if(cfg.disableRightClick){document.addEventListener('contextmenu',function(e){e.preventDefault();});}
+})();`;
+
+  await pushFileToGitHub('js/config.js', content, 'Update config.js via admin panel');
+}
+
+/* ════════════════════════════════════════════════
+   GITHUB INTEGRATION
+════════════════════════════════════════════════ */
+const GH_TOKEN_KEY  = 'bi_gh_token';
+const GH_REPO_KEY   = 'bi_gh_repo';
+const GH_BRANCH_KEY = 'bi_gh_branch';
+
+function getGhConfig() {
+  return {
+    token:  localStorage.getItem(GH_TOKEN_KEY)  || '',
+    repo:   localStorage.getItem(GH_REPO_KEY)   || '',
+    branch: localStorage.getItem(GH_BRANCH_KEY) || 'main',
+  };
+}
+
+function loadGhPanel() {
+  const gh = getGhConfig();
+  document.getElementById('gh-token').value  = gh.token;
+  document.getElementById('gh-repo').value   = gh.repo;
+  document.getElementById('gh-branch').value = gh.branch || 'main';
+  updateGhStatus(gh.token && gh.repo ? 'idle' : 'err', gh.token && gh.repo ? 'Configured — not yet tested' : 'Not configured');
+}
+
+function saveGhConfig() {
+  const t = document.getElementById('gh-token').value.trim();
+  const r = document.getElementById('gh-repo').value.trim();
+  const b = document.getElementById('gh-branch').value.trim() || 'main';
+  localStorage.setItem(GH_TOKEN_KEY, t);
+  localStorage.setItem(GH_REPO_KEY, r);
+  localStorage.setItem(GH_BRANCH_KEY, b);
+  showToast('GitHub config saved');
+  testGhConnection();
+}
+
+async function testGhConnection() {
+  const gh = getGhConfig();
+  if (!gh.token || !gh.repo) { updateGhStatus('err','Token or repo missing'); return; }
+  updateGhStatus('idle','Testing…');
+  try {
+    const res = await fetch(`https://api.github.com/repos/${gh.repo}`, {
+      headers: { Authorization: 'Bearer ' + gh.token, 'X-GitHub-Api-Version': '2022-11-28' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      updateGhStatus('ok', 'Connected · ' + data.full_name);
+      showToast('GitHub connected ✓');
+    } else {
+      updateGhStatus('err', 'Auth failed — check token/repo');
+    }
+  } catch {
+    updateGhStatus('err', 'Network error');
+  }
+}
+
+function updateGhStatus(state, text) {
+  const dot  = document.getElementById('gh-dot');
+  const span = document.getElementById('gh-status-text');
+  dot.className  = 'gh-dot ' + state;
+  span.textContent = text;
+}
+
+function ghLog(msg) {
+  const el = document.getElementById('gh-action-log');
+  if (el) el.textContent = '› ' + msg;
+}
+
+// Core GitHub file push
+// Reliable UTF-8 → base64 that handles all unicode chars (including SVG content)
+function toBase64(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+    (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+}
+
+async function pushFileToGitHub(path, content, message) {
+  const gh = getGhConfig();
+  if (!gh.token || !gh.repo) { showToast('GitHub not configured', true); return false; }
+
+  const branch  = gh.branch || 'main';
+  const apiBase = `https://api.github.com/repos/${gh.repo}/contents/${path}`;
+  const headers = {
+    Authorization: 'Bearer ' + gh.token,
+    'Content-Type': 'application/json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+
+  // Always fetch current SHA first — required for updates, omit for new files
+  let sha;
+  try {
+    const existing = await fetch(`${apiBase}?ref=${branch}`, { headers });
+    if (existing.ok) {
+      const d = await existing.json();
+      sha = d.sha;
+    } else if (existing.status !== 404) {
+      // Unexpected error checking file existence
+      const e = await existing.json();
+      showToast('GitHub error: ' + (e.message || existing.status), true);
+      return false;
+    }
+    // 404 is fine — means new file, no SHA needed
+  } catch (e) {
+    showToast('Network error checking file', true);
+    return false;
+  }
+
+  const body = { message, content: toBase64(content), branch };
+  if (sha) body.sha = sha;   // required for update; must be absent for create
+
+  try {
+    const res = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (res.ok) {
+      showToast('✓ Pushed: ' + path);
+      ghLog('Pushed ' + path + ' at ' + new Date().toLocaleTimeString());
+      return true;
+    } else {
+      const err = await res.json();
+      showToast('Push failed: ' + (err.message || res.status), true);
+      ghLog('Error ' + res.status + ': ' + (err.message || ''));
+      return false;
+    }
+  } catch {
+    showToast('Network error pushing file', true);
+    return false;
+  }
+}
+
+async function pushIconsToGitHub() {
+  const content = JSON.stringify(_icons, null, 2);
+  return pushFileToGitHub('data/gallery-icons.json', content, 'Update gallery-icons.json via admin panel');
+}
+
+async function ghToggleMaintenance() {
+  loadConfig();
+  _cfg.maintenance = !_cfg.maintenance;
+  ghLog((_cfg.maintenance ? 'Enabling' : 'Disabling') + ' maintenance mode…');
+  await saveConfig();
+  renderConfigRows();
+  showToast('Maintenance mode ' + (_cfg.maintenance ? 'ON' : 'OFF'));
+}
+
+async function ghToggleMobile() {
+  loadConfig();
+  _cfg.mobileRedirect = !_cfg.mobileRedirect;
+  ghLog((_cfg.mobileRedirect ? 'Enabling' : 'Disabling') + ' mobile redirect…');
+  await saveConfig();
+  renderConfigRows();
+  showToast('Mobile redirect ' + (_cfg.mobileRedirect ? 'ON' : 'OFF'));
+}
+
+async function ghPushGallery() {
+  ghLog('Pushing gallery-icons.json…');
+  await fetchIcons();
+  await pushIconsToGitHub();
+}
+
+/* ════════════════════════════════════════════════
+   ACCESS PANEL
+════════════════════════════════════════════════ */
+function loadAccessPanel() {
+  const trusted = getTrustedDevices().filter(d => d.expires > Date.now());
+  const list = document.getElementById('trusted-list');
+  if (!trusted.length) {
+    list.innerHTML = '<div style="padding:.5rem 0">No trusted devices.</div>';
+  } else {
+    list.innerHTML = trusted.map(d =>
+      `<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);gap:.5rem">
+        <span style="color:var(--fg)">${d.fp}</span>
+        <span style="color:var(--muted-fg)">${new Date(d.expires).toLocaleDateString()}</span>
+      </div>`
+    ).join('');
+  }
+}
+
+function changeToken() {
+  const n1 = document.getElementById('new-token-inp').value.trim();
+  const n2 = document.getElementById('confirm-token-inp').value.trim();
+  if (!n1) { showToast('Enter a new token', true); return; }
+  if (n1 !== n2) { showToast('Tokens do not match', true); return; }
+  localStorage.setItem(STORAGE_TOKEN_KEY, n1);
+  document.getElementById('new-token-inp').value = '';
+  document.getElementById('confirm-token-inp').value = '';
+  showToast('Token updated');
+}
+
+function revokeAllDevices() {
+  if (!confirm('Revoke ALL trusted devices? You will need to enter your token next visit.')) return;
+  localStorage.removeItem(STORAGE_TRUSTED_KEY);
+  sessionStorage.removeItem(STORAGE_SESSION_KEY);
+  loadAccessPanel();
+  showToast('All devices revoked');
+}
+
+/* ════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════ */
+let _toastTimer;
+function showToast(msg, isError = false) {
+  const t   = document.getElementById('toast');
+  const ico = document.getElementById('toast-icon');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.toggle('error', isError);
+  ico.setAttribute('stroke', isError ? '#f87171' : '#4ade80');
+  if (isError) ico.setAttribute('points', '18 6 6 18 M6 6l12 12');
+  else ico.setAttribute('points', '20 6 9 17 4 12');
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════════ */
+bootAuth();
+</script>
+</body>
+</html>
