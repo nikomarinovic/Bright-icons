@@ -64,8 +64,33 @@ function buildPatternDef(p) {
  */
 function extractInner(svgStr) {
   if (!svgStr || !svgStr.includes('<svg')) return svgStr || '';
-  const m = svgStr.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
-  return m ? m[1] : svgStr;
+  // Fix truncated "stroke-" attribute (missing value) found in some icon libraries.
+  // e.g. stroke- stroke-linecap  →  stroke-linecap
+  const cleaned = svgStr.replace(/stroke-\s+stroke-/g, 'stroke-');
+  const m = cleaned.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+  return m ? m[1] : cleaned;
+}
+
+/**
+ * Cleans a raw icon SVG string for safe rendering in the picker and layer thumb.
+ * Fixes the truncated "stroke-" attribute, ensures stroke-width, and forces
+ * a fixed viewBox + size so every icon renders consistently.
+ */
+function cleanIconSvg(svgStr, size = 18, color = '#c9d1d9') {
+  if (!svgStr) return '';
+  // 1. Fix broken "stroke- " (missing value) → remove the dangling attribute fragment
+  let s = svgStr.replace(/stroke-\s+/g, '');
+  // 2. Inject stroke-width="2" if missing
+  if (!s.includes('stroke-width')) {
+    s = s.replace(/<svg/, '<svg stroke-width="2"');
+  }
+  // 3. Force consistent display size and color
+  s = s.replace(/<svg([^>]*)>/, (_, attrs) => {
+    // Remove existing width/height so we can set our own
+    attrs = attrs.replace(/\s*width="[^"]*"/, '').replace(/\s*height="[^"]*"/, '');
+    return `<svg${attrs} width="${size}" height="${size}" style="color:${color};overflow:visible;">`;
+  });
+  return s;
 }
 
 /** Minimal XML-safe escaping for text content. */
@@ -110,22 +135,55 @@ function buildObjMarkup(obj, sz) {
   if (obj.type === 'svg' && obj.content) {
     const base = sz * 0.6;
     const w = base * sc, h = base * sc;
-    const inner = extractInner(obj.content);
 
-    // Preserve the source viewBox so content is never clipped to a hardcoded
-    // "0 0 24 24" box. Fall back to 24×24 only when no viewBox can be found.
-    const vbMatch = obj.content.match(/viewBox=["']([^"']+)["']/i);
+    // ── Clean the raw SVG string first (fixes truncated "stroke-" attribute) ──
+    const cleanedSrc = obj.content.replace(/stroke-\s+/g, '');
+
+    // ── Extract inner content (paths, groups, etc.) ──
+    const inner = extractInner(cleanedSrc);
+
+    // ── Read viewBox from source, fall back to width/height, then 24x24 ──
+    const vbMatch = cleanedSrc.match(/viewBox=["']([^"']+)["']/i);
     const viewBox = vbMatch ? vbMatch[1] : (() => {
-      const wM = obj.content.match(/\bwidth=["']([0-9.]+)/i);
-      const hM = obj.content.match(/\bheight=["']([0-9.]+)/i);
+      const wM = cleanedSrc.match(/\bwidth=["']([0-9.]+)/i);
+      const hM = cleanedSrc.match(/\bheight=["']([0-9.]+)/i);
       return `0 0 ${wM ? parseFloat(wM[1]) : 24} ${hM ? parseFloat(hM[1]) : 24}`;
     })();
 
-    // ✅ FIXED: removed fill="none", stroke="currentColor", stroke-width="2",
-    // stroke-linecap="round", stroke-linejoin="round" — these were overriding
-    // the icon's original fill/stroke and turning filled icons into outlines.
-    mk = `<g opacity="${op}" transform="translate(${cx},${cy}) rotate(${rot})"${fattr}>`
-      + `<svg x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" viewBox="${viewBox}">`
+    // ── Forward key presentation attributes from the source <svg> tag ──
+    // This is the critical fix: extractInner strips the <svg> tag, losing
+    // fill="none", stroke="currentColor", stroke-width, etc. We read them
+    // from the source and forward them onto the wrapper svg so nothing is lost.
+    const srcTag = cleanedSrc.match(/<svg([^>]*)>/i);
+    const srcAttrs = srcTag ? srcTag[1] : '';
+
+    const getFwd = (attr) => {
+      const m = srcAttrs.match(new RegExp(`${attr}=["']([^"']+)["']`, 'i'));
+      return m ? m[1] : null;
+    };
+
+    const fwdFill        = getFwd('fill');
+    const fwdStroke      = getFwd('stroke');
+    const fwdStrokeWidth = getFwd('stroke-width');
+    const fwdLinecap     = getFwd('stroke-linecap');
+    const fwdLinejoin    = getFwd('stroke-linejoin');
+
+    // Build forwarded attr string — only include attrs that existed on the source
+    let fwdAttrStr = '';
+    if (fwdFill)        fwdAttrStr += ` fill="${fwdFill}"`;
+    if (fwdStroke)      fwdAttrStr += ` stroke="${fwdStroke}"`;
+    if (fwdStrokeWidth) fwdAttrStr += ` stroke-width="${fwdStrokeWidth}"`;
+    else if (fwdStroke) fwdAttrStr += ` stroke-width="2"`; // default if stroke set but no width
+    if (fwdLinecap)     fwdAttrStr += ` stroke-linecap="${fwdLinecap}"`;
+    if (fwdLinejoin)    fwdAttrStr += ` stroke-linejoin="${fwdLinejoin}"`;
+
+    // If stroke uses currentColor, set CSS color on the <g> so it resolves
+    const usesCurrentColor = fwdStroke === 'currentColor' || fwdFill === 'currentColor';
+    const displayColor = obj.color || '#ffffff';
+    const colorAttr    = usesCurrentColor ? ` color="${displayColor}"` : '';
+
+    mk = `<g opacity="${op}" transform="translate(${cx},${cy}) rotate(${rot})"${colorAttr}${fattr}>`
+      + `<svg x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" viewBox="${viewBox}"${fwdAttrStr}>`
       + inner
       + `</svg>`
       + `</g>`;
@@ -323,3 +381,4 @@ window.exportSvg          = exportSvg;
 window.exportRaster       = exportRaster;
 window.copySvgToClipboard = copySvgToClipboard;
 window.getBorderRadius    = getBorderRadius;
+window.cleanIconSvg       = cleanIconSvg;

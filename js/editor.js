@@ -6,7 +6,7 @@
 
    Depends on (loaded before this file):
      js/icons.js      → ICONS array
-     js/svg-utils.js  → buildSVG, parseSvgInput, etc.
+     js/svg-utils.js  → buildSVG, parseSvgInput, cleanIconSvg, etc.
    ═══════════════════════════════════════════ */
 
 // ═══════════════════════════════════════════
@@ -124,9 +124,9 @@ function renderLayers() {
 }
 
 function _layerThumb(obj) {
+  // ✅ FIX: use cleanIconSvg so stroke-based icons render correctly in the layer panel
   if (obj.type === 'svg' && obj.content) {
-    const inner = extractInner(obj.content);
-    return `<svg viewBox="0 0 24 24" width="13" height="13" style="color:${obj.color || '#c9d1d9'}" overflow="visible">${inner}</svg>`;
+    return cleanIconSvg(obj.content, 13, obj.color || '#c9d1d9');
   }
   if (obj.type === 'raster' && obj.content)
     return `<img src="${obj.content}" style="width:13px;height:13px;object-fit:contain;border-radius:2px"/>`;
@@ -247,7 +247,6 @@ function renderObjCtrl() {
     if (el) el.addEventListener(ev, e => fn(e.target.value));
   };
 
-  // Text input – use 'input' but do NOT rebuild the panel (avoids cursor reset)
   const txtEl = document.getElementById('ctrl-text');
   if (txtEl) {
     txtEl.addEventListener('input', e => {
@@ -273,10 +272,8 @@ function renderObjCtrl() {
   });
 }
 
-// Expose so inline onclick handlers in the generated HTML can call it
 window.renderObjCtrl = renderObjCtrl;
 
-// Full re-render convenience
 function render() { renderCanvas(); renderLayers(); renderObjCtrl(); }
 
 // ═══════════════════════════════════════════
@@ -400,7 +397,6 @@ function initDrag() {
   box.addEventListener('pointerup', e => {
     if (e.pointerId !== pid) return;
     dragging = false; pid = null;
-    // Sync position number inputs after drag
     const sel = getSel();
     if (sel) {
       const cx = document.getElementById('ctrl-x');
@@ -418,7 +414,6 @@ function initDrag() {
 // ═══════════════════════════════════════════
 
 function initBg() {
-  // Color palette
   const pal = document.getElementById('bg-pal');
   if (pal) {
     pal.innerHTML = BG_COLORS.map(c =>
@@ -442,21 +437,18 @@ function initBg() {
     S.bgColor = e.target.value; if (picker) picker.value = S.bgColor; _syncBgPal(); renderCanvas();
   });
 
-  // Background shape
   document.querySelectorAll('[data-shape]').forEach(b => b.addEventListener('click', () => {
     S.bgShape = b.dataset.shape;
     document.querySelectorAll('[data-shape]').forEach(x => x.classList.toggle('active', x.dataset.shape === S.bgShape));
     renderCanvas();
   }));
 
-  // Background pattern
   document.querySelectorAll('[data-pattern]').forEach(b => b.addEventListener('click', () => {
     S.bgPattern = b.dataset.pattern;
     document.querySelectorAll('[data-pattern]').forEach(x => x.classList.toggle('active', x.dataset.pattern === S.bgPattern));
     renderCanvas();
   }));
 
-  // Snap to grid
   const snapBtn = document.getElementById('snap-btn');
   if (snapBtn) snapBtn.addEventListener('click', () => {
     S.snap = !S.snap;
@@ -506,11 +498,15 @@ function _renderIconGrid(q) {
   const filtered = lq ? ICONS.filter(i => i.n.toLowerCase().includes(lq) || i.c.includes(lq)) : ICONS;
   const shown    = filtered.slice(0, 300);
   if (cnt) cnt.textContent = `${shown.length} of ${filtered.length} icons`;
+
+  // ✅ FIX: use cleanIconSvg so all icons render with correct stroke-width and color
   grid.innerHTML = shown.map(ic =>
     `<button class="icon-btn" data-n="${ic.n.replace(/"/g, '&quot;')}" title="${ic.n}">` +
-      ic.s + `<span class="icon-tooltip">${ic.n}</span>` +
+      cleanIconSvg(ic.s, 18, '#c9d1d9') +
+      `<span class="icon-tooltip">${ic.n}</span>` +
     `</button>`
   ).join('');
+
   grid.querySelectorAll('.icon-btn').forEach(b => b.addEventListener('click', () => {
     const icon = ICONS.find(i => i.n === b.dataset.n);
     if (icon && _iconCb) _iconCb(icon.s, icon.n);
@@ -536,27 +532,23 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCanvas(); renderLayers(); renderObjCtrl();
   initDrag(); initBg();
 
-  // Export buttons
   document.getElementById('export-svg-btn').addEventListener('click', () => exportSvg(S));
   document.getElementById('export-png-btn').addEventListener('click', () => exportRaster(S, 'png',  'icon.png'));
   document.getElementById('export-jpg-btn').addEventListener('click', () => exportRaster(S, 'jpeg', 'icon.jpg'));
   document.getElementById('copy-svg-btn')  .addEventListener('click', e => _handleCopy(e.currentTarget));
 
-  // Add object buttons
   document.getElementById('add-icon-btn') .addEventListener('click', () => openIconModal(addIcon));
   document.getElementById('add-text-btn') .addEventListener('click', addText);
   document.querySelectorAll('[data-add-shape]').forEach(b =>
     b.addEventListener('click', () => addShape(b.dataset.addShape))
   );
 
-  // Upload file
   const fi = document.getElementById('file-input');
   document.getElementById('upload-btn').addEventListener('click', () => fi.click());
   fi.addEventListener('change', e => {
     const f = e.target.files[0]; if (f) addFile(f); fi.value = '';
   });
 
-  // Paste SVG
   const pasteBtn  = document.getElementById('paste-svg-btn');
   const pasteArea = document.getElementById('paste-area');
   pasteBtn.addEventListener('click', () => {
@@ -567,8 +559,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('paste-apply').addEventListener('click', () => {
     const txt = document.getElementById('svg-ta').value.trim();
     if (!txt) return;
-    const o = { ..._base('svg'), content: parseSvgInput(txt), name: 'Custom SVG' };
-    // _base is closure-only – need to inline here
     const obj = { id: newId(), type: 'svg', ox: 0, oy: 0, sc: 1, rot: 0, op: 1, color: null,
                   content: parseSvgInput(txt), name: 'Custom SVG' };
     S.objects.push(obj); S.selId = obj.id; render();
@@ -576,8 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('svg-ta').value = '';
   });
 
-  // Icon modal events
-  document.getElementById('icon-search')  .addEventListener('input',  e => _renderIconGrid(e.target.value));
+  document.getElementById('icon-search')    .addEventListener('input',  e => _renderIconGrid(e.target.value));
   document.getElementById('modal-close-btn').addEventListener('click', closeIconModal);
-  document.getElementById('icon-modal')   .addEventListener('click',  e => { if (e.target.id === 'icon-modal') closeIconModal(); });
+  document.getElementById('icon-modal')     .addEventListener('click',  e => { if (e.target.id === 'icon-modal') closeIconModal(); });
 });
