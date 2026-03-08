@@ -4,10 +4,10 @@
    Last saved: 2026-03-08T11:23:51.350Z
    ═══════════════════════════════════════════ */
 const SITE_CONFIG = {
-  maintenance:       true,
+  maintenance:       false,
   mobileRedirect:    false,
   mobileBreakpoint:  1024,
-  disableRightClick: false,
+  disableRightClick: true,
   pages: {
     maintenance:      'maintenance.html',
     mobileWall:       'mobile-not-ready.html',
