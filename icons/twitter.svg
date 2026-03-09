@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256 256" width="256" height="256">
+  <defs><clipPath id="bgc"><rect width="256" height="256" rx="51.2"/></clipPath></defs>
+  <rect width="256" height="256" rx="51.2" fill="#f5f5f5"/>
+  
+  <g opacity="1" transform="translate(128,128) rotate(0)"><svg x="-76.8" y="-76.8" width="153.6" height="153.6" viewBox="0 0 16 16"><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_bgCarrier" stroke-width="0"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_iconCarrier"><path fill="#1D9BF0" d="M13.567 5.144c.008.123.008.247.008.371 0 3.796-2.889 8.173-8.172 8.173v-.002A8.131 8.131 0 011 12.398a5.768 5.768 0 004.25-1.19 2.876 2.876 0 01-2.683-1.995c.431.083.875.066 1.297-.05A2.873 2.873 0 011.56 6.348v-.036c.4.222.847.345 1.304.36a2.876 2.876 0 01-.89-3.836 8.152 8.152 0 005.92 3 2.874 2.874 0 014.895-2.619 5.763 5.763 0 001.824-.697 2.883 2.883 0 01-1.262 1.588A5.712 5.712 0 0015 3.656a5.834 5.834 0 01-1.433 1.488z"/></g></svg></g>
+  
+</svg>
