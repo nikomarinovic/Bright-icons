@@ -27,25 +27,6 @@ const BG_COLORS = [
   '#e34f26','#3178c6','#f7df1e','#61dafb','#ff6b6b','#6bcb77','#4d96ff',
 ];
 
-const OBJ_COLORS = [
-  null,
-  '#ffffff','#f5f5f5','#000000','#1a1a1a',
-  '#ef4444','#dc2626','#fca5a5',
-  '#f97316','#ea580c','#fdba74',
-  '#eab308','#ca8a04','#fde047',
-  '#22c55e','#16a34a','#86efac',
-  '#14b8a6','#0d9488','#5eead4',
-  '#3b82f6','#2563eb','#93c5fd',
-  '#8b5cf6','#7c3aed','#c4b5fd',
-  '#ec4899','#db2777','#f9a8d4',
-  '#6366f1','#4f46e5','#a5b4fc',
-  '#06b6d4','#0891b2','#67e8f9',
-  '#f43f5e','#e11d48','#fda4af',
-  '#84cc16','#65a30d','#bef264',
-  '#ff6b6b','#ffd93d','#6bcb77','#4d96ff',
-  '#238636','#1f6feb','#e34f26','#3178c6','#f7df1e',
-];
-
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
@@ -124,7 +105,6 @@ function renderLayers() {
 }
 
 function _layerThumb(obj) {
-  // ✅ FIX: use cleanIconSvg so stroke-based icons render correctly in the layer panel
   if (obj.type === 'svg' && obj.content) {
     return cleanIconSvg(obj.content, 13, obj.color || '#c9d1d9');
   }
@@ -166,12 +146,10 @@ function renderObjCtrl() {
   const isSh = sel.type === 'shape';
   const isTx = sel.type === 'text';
 
-  // Color palette HTML
-  const palHtml = (current) => OBJ_COLORS.map(c => {
-    if (c === null)
-      return `<button class="swatch transparent-swatch${current === null ? ' active' : ''}" onclick="updSel({color:null})" title="Original/Inherit">⊘</button>`;
-    return `<button class="swatch${current === c ? ' active' : ''}" style="background:${c}" onclick="updSel({color:'${c}'})" title="${c}"></button>`;
-  }).join('');
+  // Color palette HTML — uses same BG_COLORS palette
+  const palHtml = (current) => BG_COLORS.map(c =>
+    `<button class="swatch${current === c ? ' active' : ''}" style="background:${c}" onclick="updSel({color:'${c}'})" title="${c}"></button>`
+  ).join('');
 
   panel.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;gap:.4rem">
@@ -231,11 +209,10 @@ function renderObjCtrl() {
 
     <div class="ctrl-lbl" style="margin-bottom:.3rem">Color</div>
     <div class="pal" style="margin-bottom:.3rem">${palHtml(sel.color)}</div>
-    ${sel.color != null ? `
-      <div class="color-row" style="margin-bottom:.5rem">
-        <input type="color" class="color-picker" id="ctrl-cp" value="${sel.color}"/>
-        <input type="text"  class="text-inp"     id="ctrl-ch" value="${sel.color}" placeholder="#rrggbb"/>
-      </div>` : ''}
+    <div class="color-row" style="margin-bottom:.5rem">
+      <input type="color" class="color-picker" id="ctrl-cp" value="${sel.color || '#ffffff'}"/>
+      <input type="text"  class="text-inp"     id="ctrl-ch" value="${sel.color || ''}" placeholder="#rrggbb"/>
+    </div>
 
     <button class="sec-btn" style="width:100%;margin-top:.25rem"
       onclick="updSel({ox:0,oy:0,sc:1,rot:0});renderObjCtrl()">↺ Reset Transform</button>
@@ -499,7 +476,6 @@ function _renderIconGrid(q) {
   const shown    = filtered.slice(0, 300);
   if (cnt) cnt.textContent = `${shown.length} of ${filtered.length} icons`;
 
-  // ✅ FIX: use cleanIconSvg so all icons render with correct stroke-width and color
   grid.innerHTML = shown.map(ic =>
     `<button class="icon-btn" data-n="${ic.n.replace(/"/g, '&quot;')}" title="${ic.n}">` +
       cleanIconSvg(ic.s, 18, '#c9d1d9') +
