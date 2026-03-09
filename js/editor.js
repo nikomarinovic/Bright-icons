@@ -57,7 +57,9 @@ function renderCanvas() {
   const svg = box.querySelector('svg');
   if (svg) { svg.style.width = '100%'; svg.style.height = '100%'; svg.id = 'canvas-svg'; }
   box.style.borderRadius = getBorderRadius(S.bgShape);
-  box.style.boxShadow    = `0 8px 40px ${S.bgColor}55`;
+  box.style.boxShadow    = S.bgColor === 'transparent'
+    ? '0 8px 40px rgba(0,0,0,0.3)'
+    : `0 8px 40px ${S.bgColor}55`;
   box.classList.toggle('has-sel', !!S.selId);
   _updateInfo();
 }
@@ -146,10 +148,25 @@ function renderObjCtrl() {
   const isSh = sel.type === 'shape';
   const isTx = sel.type === 'text';
 
-  // Color palette HTML — uses same BG_COLORS palette
-  const palHtml = (current) => BG_COLORS.map(c =>
-    `<button class="swatch${current === c ? ' active' : ''}" style="background:${c}" onclick="updSel({color:'${c}'})" title="${c}"></button>`
-  ).join('');
+  // Color palette HTML — uses same BG_COLORS palette + "Original" swatch
+  const palHtml = (current) => {
+    // "Original" swatch (null color = use SVG's own colors)
+    const origActive = current === null || current === undefined || current === '';
+    const origSwatch = `<button class="swatch${origActive ? ' active' : ''}"
+      data-obj-c=""
+      style="background:#1c1c1c;position:relative;overflow:hidden;"
+      title="Original color">
+      <svg width="10" height="10" viewBox="0 0 10 10" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
+        <line x1="1" y1="9" x2="9" y2="1" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>`;
+
+    const colorSwatches = BG_COLORS.map(c =>
+      `<button class="swatch${current === c ? ' active' : ''}" style="background:${c}" data-obj-c="${c}" title="${c}"></button>`
+    ).join('');
+
+    return origSwatch + colorSwatches;
+  };
 
   panel.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;gap:.4rem">
@@ -207,8 +224,8 @@ function renderObjCtrl() {
       </div>
     </div>
 
-    <div class="ctrl-lbl" style="margin-bottom:.3rem">Color</div>
-    <div class="pal" style="margin-bottom:.3rem">${palHtml(sel.color)}</div>
+    <div class="ctrl-lbl" style="margin-bottom:.3rem">Color <span style="font-size:.65rem;color:var(--muted-fg)">(slash = original)</span></div>
+    <div class="pal" id="obj-pal" style="margin-bottom:.3rem">${palHtml(sel.color)}</div>
     <div class="color-row" style="margin-bottom:.5rem">
       <input type="color" class="color-picker" id="ctrl-cp" value="${sel.color || '#ffffff'}"/>
       <input type="text"  class="text-inp"     id="ctrl-ch" value="${sel.color || ''}" placeholder="#rrggbb"/>
@@ -240,13 +257,34 @@ function renderObjCtrl() {
   wire('ctrl-cp',  v => {
     updSel({ color: v });
     const t = document.getElementById('ctrl-ch'); if (t) t.value = v;
+    _syncObjPal(v);
   });
   wire('ctrl-ch',  v => {
-    if (/^#[0-9a-f]{3,6}$/i.test(v)) {
+    if (v === '' || v === null) {
+      updSel({ color: null });
+      _syncObjPal(null);
+    } else if (/^#[0-9a-f]{3,6}$/i.test(v)) {
       updSel({ color: v });
       const p = document.getElementById('ctrl-cp'); if (p) p.value = v;
+      _syncObjPal(v);
     }
   });
+
+  // Object palette click handler
+  const objPal = document.getElementById('obj-pal');
+  if (objPal) {
+    objPal.addEventListener('click', e => {
+      const btn = e.target.closest('[data-obj-c]'); if (!btn) return;
+      const c = btn.dataset.objC; // '' means original (null)
+      const color = c === '' ? null : c;
+      updSel({ color });
+      _syncObjPal(color);
+      const cp = document.getElementById('ctrl-cp');
+      const ch = document.getElementById('ctrl-ch');
+      if (color) { if (cp) cp.value = color; if (ch) ch.value = color; }
+      else        { if (ch) ch.value = ''; }
+    });
+  }
 }
 
 window.renderObjCtrl = renderObjCtrl;
@@ -393,14 +431,33 @@ function initDrag() {
 function initBg() {
   const pal = document.getElementById('bg-pal');
   if (pal) {
-    pal.innerHTML = BG_COLORS.map(c =>
+    // Transparent swatch first, then regular colors
+    const transparentSwatch = `<button class="swatch transparent-swatch${S.bgColor === 'transparent' ? ' active' : ''}"
+      data-c="transparent"
+      title="Transparent"
+      style="position:relative;overflow:hidden;background:
+        linear-gradient(45deg,#ccc 25%,transparent 25%),
+        linear-gradient(-45deg,#ccc 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#ccc 75%),
+        linear-gradient(-45deg,transparent 75%,#ccc 75%);
+        background-size:6px 6px;
+        background-position:0 0,0 3px,3px -3px,-3px 0px;
+        background-color:#fff;">
+    </button>`;
+
+    pal.innerHTML = transparentSwatch + BG_COLORS.map(c =>
       `<button class="swatch${S.bgColor === c ? ' active' : ''}" style="background:${c}" data-c="${c}" title="${c}"></button>`
     ).join('');
+
     pal.addEventListener('click', e => {
       const btn = e.target.closest('[data-c]'); if (!btn) return;
       S.bgColor = btn.dataset.c;
-      document.getElementById('bg-picker').value = S.bgColor;
-      document.getElementById('bg-hex').value    = S.bgColor;
+      if (S.bgColor !== 'transparent') {
+        document.getElementById('bg-picker').value = S.bgColor;
+        document.getElementById('bg-hex').value    = S.bgColor;
+      } else {
+        document.getElementById('bg-hex').value = 'transparent';
+      }
       _syncBgPal(); renderCanvas();
     });
   }
@@ -411,7 +468,12 @@ function initBg() {
     S.bgColor = e.target.value; if (hex) hex.value = S.bgColor; _syncBgPal(); renderCanvas();
   });
   if (hex) hex.addEventListener('input', e => {
-    S.bgColor = e.target.value; if (picker) picker.value = S.bgColor; _syncBgPal(); renderCanvas();
+    const v = e.target.value.trim();
+    if (v === 'transparent') {
+      S.bgColor = 'transparent'; _syncBgPal(); renderCanvas();
+    } else {
+      S.bgColor = v; if (picker) picker.value = S.bgColor; _syncBgPal(); renderCanvas();
+    }
   });
 
   document.querySelectorAll('[data-shape]').forEach(b => b.addEventListener('click', () => {
@@ -444,6 +506,15 @@ function initBg() {
 function _syncBgPal() {
   document.querySelectorAll('#bg-pal .swatch').forEach(b =>
     b.classList.toggle('active', b.dataset.c === S.bgColor)
+  );
+}
+
+function _syncObjPal(color) {
+  const pal = document.getElementById('obj-pal');
+  if (!pal) return;
+  const target = color === null || color === undefined ? '' : color;
+  pal.querySelectorAll('.swatch').forEach(b =>
+    b.classList.toggle('active', b.dataset.objC === target)
   );
 }
 

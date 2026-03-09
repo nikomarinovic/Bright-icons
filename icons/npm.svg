@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256 256" width="256" height="256">
+  <defs><clipPath id="bgc"><rect width="256" height="256" rx="51.2"/></clipPath></defs>
+  <rect width="256" height="256" rx="51.2" fill="#f5f5f5"/>
+  
+  <g opacity="1" transform="translate(128,128) rotate(0)"><svg x="-88.32" y="-88.32" width="176.64" height="176.64" viewBox="0 0 32 32"><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_bgCarrier" stroke-width="0"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_iconCarrier"> <path d="M0 10V20H9V22H16V20H32V10H0Z" fill="#CB3837"/> <path d="M5.46205 12H2V18H5.46205V13.6111H7.22344V18H8.98482V12H5.46205ZM10.7462 12V20H14.269V18H17.731V12H10.7462ZM15.9696 16.3889H14.269V13.6111H15.9696V16.3889ZM22.9545 12H19.4924V18H22.9545V13.6111H24.7158V18H26.4772V13.6111H28.2386V18H30V12H22.9545Z" fill="white"/> </g></svg></g>
+  
+</svg>
