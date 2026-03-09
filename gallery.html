@@ -627,6 +627,9 @@
         max-height: 95vh; width: 100%;
       }
     }
+    .footer {
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
@@ -670,12 +673,12 @@
         <span class="count-pill" id="galCount"><strong>—</strong>&nbsp;icons</span>
         <div class="toolbar-divider"></div>
         <div class="view-toggle">
-          <button class="view-btn active" id="viewCompact" title="Compact" onclick="setView('compact')">
+          <button class="view-btn" id="viewCompact" title="Compact" onclick="setView('compact')">
             <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
               <path d="M1 1h3v3H1V1Zm5 0h3v3H6V1Zm5 0h3v3h-3V1ZM1 6h3v3H1V6Zm5 0h3v3H6V6Zm5 0h3v3h-3V6ZM1 11h3v3H1v-3Zm5 0h3v3H6v-3Zm5 0h3v3h-3v-3Z" fill="currentColor"/>
             </svg>
           </button>
-          <button class="view-btn" id="viewLarge" title="Large" onclick="setView('large')">
+          <button class="view-btn active" id="viewLarge" title="Large" onclick="setView('large')">
             <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
               <path d="M1 1h6v6H1V1Zm7 0h6v6H8V1ZM1 8h6v6H1V8Zm7 0h6v6H8V8Z" fill="currentColor"/>
             </svg>
@@ -692,7 +695,7 @@
     <!-- Grid -->
     <div class="gallery-main">
       <div class="gallery-section-label" id="galLabel">All Icons</div>
-      <div class="gallery-grid" id="galGrid">
+      <div class="gallery-grid view-large" id="galGrid">
         <div class="gallery-state">
           <div class="gallery-spinner"></div>
           Loading icons…
