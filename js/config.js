@@ -7,7 +7,7 @@ const SITE_CONFIG = {
   maintenance:       false,
   mobileRedirect:    true,
   mobileBreakpoint:  1024,
-  disableRightClick: true,
+  disableRightClick: false,
   pages: {
     maintenance:      '/public/dev/maintenance.html',
     mobileWall:       '/public/dev/mobile-not-ready.html',
