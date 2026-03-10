@@ -10,10 +10,8 @@
   <script src="js/config.js" defer></script>
   <style>
     /* ══════════════════════════════════════════════
-       GALLERY — FULL REDESIGN
-       Aesthetic: Refined dark editorial.
+       GALLERY PAGE
     ══════════════════════════════════════════════ */
-
     .gallery-page {
       background: var(--bg);
       min-height: 100vh;
@@ -30,7 +28,6 @@
       z-index: 5;
     }
 
-    /* Subtle ambient glow at top */
     .gallery-ambient {
       position: fixed;
       top: -100px;
@@ -118,11 +115,7 @@
     }
     .count-pill strong { color: var(--fg); font-weight: 600; }
 
-    .toolbar-divider {
-      width: 1px; height: 20px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
+    .toolbar-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
 
     .view-toggle {
       display: flex;
@@ -222,7 +215,6 @@
     .gal-tile:hover::before { opacity: 1; }
     .gal-tile:active { transform: scale(0.97); }
 
-    /* Inline SVG icon in tile */
     .tile-icon {
       width: 56px; height: 56px;
       display: flex; align-items: center; justify-content: center;
@@ -230,10 +222,7 @@
       flex-shrink: 0;
       transition: transform 0.2s ease;
     }
-    .tile-icon svg {
-      width: 56px; height: 56px;
-      display: block;
-    }
+    .tile-icon svg { width: 56px; height: 56px; display: block; }
     .gal-tile:hover .tile-icon { transform: scale(1.08); }
 
     .gal-tile-name {
@@ -248,14 +237,14 @@
     }
     .gal-tile:hover .gal-tile-name { color: var(--fg); }
 
-    /* Small green dot = has dark variant */
+    /* Green dot — icon has multiple variants */
     .gal-dark-dot {
       position: absolute;
       top: 6px; right: 6px;
       width: 5px; height: 5px;
       border-radius: 50%;
       background: var(--primary);
-      opacity: 0.55;
+      opacity: 0.7;
     }
 
     /* List view overrides */
@@ -284,7 +273,6 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* States */
     .gallery-state {
       grid-column: 1 / -1;
       text-align: center;
@@ -311,13 +299,13 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ══════════════════════════════════════════════
-       MODAL
+       MODAL — 3-column layout
     ══════════════════════════════════════════════ */
     .icon-modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(18px) saturate(0.7);
-      -webkit-backdrop-filter: blur(18px) saturate(0.7);
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(20px) saturate(0.6);
+      -webkit-backdrop-filter: blur(20px) saturate(0.6);
       z-index: 1000;
       display: none;
       align-items: center;
@@ -329,108 +317,30 @@
     @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 
     .icon-modal {
-      background: #13181f;
-      border: 1px solid rgba(48,54,61,0.7);
-      border-radius: 1.375rem;
-      width: min(800px, 100%);
-      max-height: 86vh;
+      background: #0f1419;
+      border: 1px solid rgba(48,54,61,0.6);
+      border-radius: 1.5rem;
+      width: min(1000px, 100%);
+      max-height: 88vh;
       display: grid;
-      grid-template-columns: 1fr 300px;
+      grid-template-columns: 220px 1fr 260px;
       overflow: hidden;
       position: relative;
       box-shadow:
         0 0 0 1px rgba(255,255,255,0.03),
-        0 32px 100px rgba(0,0,0,0.8),
-        0 0 160px rgba(40,142,69,0.05);
-      animation: modalIn 0.28s cubic-bezier(.22,.68,0,1.2);
+        0 40px 120px rgba(0,0,0,0.85),
+        0 0 180px rgba(40,142,69,0.04);
+      animation: modalIn 0.3s cubic-bezier(.22,.68,0,1.2);
     }
     @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      from { opacity: 0; transform: scale(0.88) translateY(24px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* LEFT */
-    .modal-left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 3rem;
-      min-height: 400px;
-      position: relative;
-      background: #0d1117;
-      overflow: hidden;
-    }
-    .modal-left::before {
-      content: '';
-      position: absolute;
-      top: -50px; right: -50px;
-      width: 220px; height: 220px;
-      background: radial-gradient(circle, rgba(40,142,69,0.07) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .modal-left::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; left: -40px;
-      width: 180px; height: 180px;
-      background: radial-gradient(circle, rgba(40,142,69,0.04) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .modal-preview-wrap {
-      position: relative;
-      z-index: 2;
-      width: 128px; height: 128px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .modal-preview-ring {
-      position: absolute;
-      inset: -28px;
-      border-radius: 50%;
-      border: 1px solid rgba(40,142,69,0.09);
-      animation: ringPulse 3s ease-in-out infinite;
-    }
-    .modal-preview-ring-2 {
-      position: absolute;
-      inset: -52px;
-      border-radius: 50%;
-      border: 1px solid rgba(40,142,69,0.04);
-      animation: ringPulse 3s ease-in-out infinite 0.6s;
-    }
-    @keyframes ringPulse {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50%       { opacity: 1;   transform: scale(1.04); }
-    }
-
-    /* Inline SVG preview in modal */
-    .modal-preview-icon {
-      width: 128px; height: 128px;
-      display: flex; align-items: center; justify-content: center;
-      position: relative; z-index: 1;
-      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.5));
-      transition: opacity 0.14s, transform 0.14s;
-    }
-    .modal-preview-icon svg {
-      width: 128px; height: 128px;
-      display: block;
-    }
-    .modal-preview-icon.swapping { opacity: 0; transform: scale(0.88); }
-
-    /* RIGHT */
-    .modal-right {
-      border-left: 1px solid rgba(48,54,61,0.6);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      background: #0f1419;
-    }
-    .modal-right::-webkit-scrollbar { width: 3px; }
-    .modal-right::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
+    /* ── CLOSE BUTTON ── */
     .modal-close-btn {
       position: absolute;
-      top: 0.875rem; right: 0.875rem;
+      top: 1rem; right: 1rem;
       width: 2rem; height: 2rem;
       border-radius: 0.5rem;
       background: rgba(33,38,45,0.9);
@@ -448,95 +358,284 @@
       transform: rotate(90deg) scale(1.05);
     }
 
-    .modal-header {
-      padding: 1.5rem 1.5rem 1.125rem;
-      border-bottom: 1px solid rgba(48,54,61,0.5);
-      flex-shrink: 0;
+    /* ══════════════════════
+       LEFT — Variants List
+    ══════════════════════ */
+    .modal-variants-panel {
+      border-right: 1px solid rgba(48,54,61,0.5);
+      display: flex;
+      flex-direction: column;
+      background: #0d1117;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
-    .modal-icon-name {
+    .modal-variants-panel::-webkit-scrollbar { width: 2px; }
+    .modal-variants-panel::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .mvp-header {
+      padding: 1.375rem 1.125rem 0.75rem;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(48,54,61,0.4);
+    }
+    .mvp-icon-name {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--fg);
       letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .modal-badges { display: flex; gap: 0.375rem; flex-wrap: wrap; }
-    .mbadge {
-      display: inline-flex; align-items: center; gap: 0.28rem;
-      height: 20px; padding: 0 0.55rem;
-      border-radius: 9999px;
+    .mvp-subtitle {
       font-family: var(--font-display);
-      font-size: 0.6rem; font-weight: 600;
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
-    .mbadge.green {
-      background: rgba(40,142,69,0.12); color: #4ade80;
-      border: 1px solid rgba(40,142,69,0.2);
-    }
-    .mbadge.grey {
-      background: rgba(110,118,129,0.1); color: var(--muted-fg);
-      border: 1px solid var(--border);
+      font-size: 0.58rem;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
     }
 
-    .modal-section {
-      padding: 1.125rem 1.5rem;
-      border-bottom: 1px solid rgba(48,54,61,0.5);
+    .mvp-section-label {
+      font-family: var(--font-display);
+      font-size: 0.56rem;
+      font-weight: 600;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 1rem 1.125rem 0.5rem;
       flex-shrink: 0;
     }
-    .modal-section-title {
+
+    .variant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0 0.625rem 1rem;
+      flex-shrink: 0;
+    }
+
+    .variant-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem 0.625rem;
+      border-radius: 0.625rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .variant-list-item:hover {
+      background: rgba(33,38,45,0.8);
+    }
+    .variant-list-item.active {
+      background: rgba(40,142,69,0.07);
+      border-color: rgba(40,142,69,0.3);
+    }
+    .variant-list-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 2px;
+      border-radius: 1px;
+      background: var(--primary);
+    }
+
+    .vli-thumb {
+      width: 36px; height: 36px;
+      border-radius: 0.5rem;
+      background: rgba(33,38,45,0.6);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .vli-thumb.dark-bg { background: #f0f0f0; }
+    .vli-thumb svg { width: 22px; height: 22px; display: block; }
+
+    .vli-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .vli-name {
       font-family: var(--font-display);
-      font-size: 0.58rem; font-weight: 600;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--fg);
+      text-transform: capitalize;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .variant-list-item.active .vli-name { color: #4ade80; }
+    .vli-meta {
+      font-family: var(--font-display);
+      font-size: 0.55rem;
       color: var(--muted-fg);
-      text-transform: uppercase; letter-spacing: 0.16em;
+      margin-top: 1px;
+    }
+
+    /* ══════════════════════
+       CENTER — Preview
+    ══════════════════════ */
+    .modal-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+      background: #0d1117;
+      overflow: hidden;
+      min-height: 380px;
+    }
+    .modal-center::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(40,142,69,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .modal-center::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(40,142,69,0.03) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Grid decoration */
+    .modal-center-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(48,54,61,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,54,61,0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .modal-preview-wrap {
+      position: relative;
+      z-index: 2;
+      width: 156px; height: 156px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-preview-ring {
+      position: absolute;
+      inset: -32px;
+      border-radius: 50%;
+      border: 1px solid rgba(40,142,69,0.10);
+      animation: ringPulse 3s ease-in-out infinite;
+    }
+    .modal-preview-ring-2 {
+      position: absolute;
+      inset: -60px;
+      border-radius: 50%;
+      border: 1px solid rgba(40,142,69,0.04);
+      animation: ringPulse 3s ease-in-out infinite 0.6s;
+    }
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.04); }
+    }
+
+    .modal-preview-icon {
+      width: 156px; height: 156px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.5));
+      transition: opacity 0.13s, transform 0.13s;
+    }
+    .modal-preview-icon svg { width: 156px; height: 156px; display: block; }
+    .modal-preview-icon.swapping { opacity: 0; transform: scale(0.86); }
+
+    /* Variant name chip */
+    .preview-variant-chip {
+      position: relative; z-index: 3;
+      margin-top: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      height: 22px;
+      padding: 0 0.65rem;
+      border-radius: 9999px;
+      background: rgba(33,38,45,0.7);
+      border: 1px solid rgba(48,54,61,0.7);
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .preview-variant-chip::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0.8;
+    }
+
+    /* ══════════════════════
+       RIGHT — Export
+    ══════════════════════ */
+    .modal-export-panel {
+      border-left: 1px solid rgba(48,54,61,0.5);
+      display: flex;
+      flex-direction: column;
+      background: #0f1419;
+      overflow-y: auto;
+    }
+    .modal-export-panel::-webkit-scrollbar { width: 2px; }
+    .modal-export-panel::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .mep-section {
+      padding: 1.25rem 1.25rem;
+      border-bottom: 1px solid rgba(48,54,61,0.4);
+    }
+    .mep-section:last-child { border-bottom: none; }
+
+    .mep-label {
+      font-family: var(--font-display);
+      font-size: 0.56rem;
+      font-weight: 600;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
       margin-bottom: 0.75rem;
     }
 
-    /* Variant cards */
-    .variant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    .variant-card {
-      border-radius: 0.75rem;
-      border: 1.5px solid rgba(48,54,61,0.7);
-      background: rgba(33,38,45,0.5);
-      display: flex; flex-direction: column;
-      align-items: center; gap: 0.45rem;
-      padding: 0.875rem 0.5rem 0.625rem;
-      cursor: pointer;
-      transition: all 0.18s;
+    /* File format badges in export section */
+    .format-badges {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 0.875rem;
+      flex-wrap: wrap;
     }
-    .variant-card:hover {
-      border-color: rgba(110,118,129,0.5);
-      background: rgba(33,38,45,0.9);
-      transform: translateY(-1px);
-    }
-    .variant-card.active {
-      border-color: rgba(40,142,69,0.5);
-      background: rgba(40,142,69,0.06);
-      box-shadow: 0 0 0 1px rgba(40,142,69,0.1);
-    }
-    .variant-card-bg {
-      width: 48px; height: 48px;
-      border-radius: 0.5rem;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-    .variant-card-bg.dark-bg  { background: #0d1117; }
-    .variant-card-bg.light-bg { background: #f0f0f0; }
-    /* Inline SVG in variant cards */
-    .variant-icon {
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .variant-icon svg { width: 32px; height: 32px; display: block; }
-    .variant-card-label {
+    .fmt-badge {
+      height: 20px;
+      padding: 0 0.5rem;
+      border-radius: 0.25rem;
       font-family: var(--font-display);
-      font-size: 0.56rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: rgba(33,38,45,0.8);
+      border: 1px solid rgba(48,54,61,0.7);
       color: var(--muted-fg);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center;
     }
-    .variant-card.active .variant-card-label { color: #4ade80; }
+    .fmt-badge.active {
+      background: rgba(40,142,69,0.12);
+      border-color: rgba(40,142,69,0.3);
+      color: #4ade80;
+    }
 
-    /* Export buttons */
     .export-list { display: flex; flex-direction: column; gap: 0.3rem; }
     .exp-btn {
       width: 100%;
@@ -544,7 +643,7 @@
       padding: 0.6rem 0.875rem;
       border-radius: 0.5rem;
       font-family: var(--font-display);
-      font-size: 0.73rem; font-weight: 500;
+      font-size: 0.72rem; font-weight: 500;
       border: 1px solid rgba(48,54,61,0.7);
       cursor: pointer;
       transition: all 0.15s;
@@ -559,32 +658,53 @@
     }
     .exp-btn:active { transform: scale(0.98); }
     .exp-btn.primary {
-      background: linear-gradient(135deg, rgba(40,142,69,0.88), rgba(46,165,102,0.88));
-      border-color: rgba(40,142,69,0.3);
-      box-shadow: 0 4px 20px rgba(40,142,69,0.18), inset 0 1px 0 rgba(255,255,255,0.07);
+      background: linear-gradient(135deg, rgba(40,142,69,0.9), rgba(46,165,102,0.9));
+      border-color: rgba(40,142,69,0.35);
+      box-shadow: 0 4px 20px rgba(40,142,69,0.2), inset 0 1px 0 rgba(255,255,255,0.07);
     }
     .exp-btn.primary:hover {
-      box-shadow: 0 6px 24px rgba(40,142,69,0.28), inset 0 1px 0 rgba(255,255,255,0.1);
+      box-shadow: 0 6px 24px rgba(40,142,69,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
       transform: translateX(2px);
     }
     .exp-btn.success {
-      background: linear-gradient(135deg, rgba(40,142,69,0.88), rgba(46,165,102,0.88));
-      border-color: rgba(40,142,69,0.3);
+      background: linear-gradient(135deg, rgba(40,142,69,0.9), rgba(46,165,102,0.9));
+      border-color: rgba(40,142,69,0.35);
       color: #fff;
     }
     .exp-btn svg { flex-shrink: 0; opacity: 0.9; }
     .exp-tag {
       margin-left: auto;
-      font-size: 0.55rem; font-weight: 700;
+      font-size: 0.53rem; font-weight: 700;
       letter-spacing: 0.1em;
       padding: 0.1rem 0.4rem;
       border-radius: 0.2rem;
       background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.4);
     }
     .exp-btn.primary .exp-tag { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.6); }
 
-    /* Toast */
+    /* Info section at bottom of export panel */
+    .mep-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+    }
+    .mep-info-key {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      color: var(--muted-fg);
+    }
+    .mep-info-val {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════
+       TOAST
+    ══════════════════════ */
     #gal-toast {
       position: fixed;
       bottom: 2rem; left: 50%;
@@ -605,15 +725,27 @@
     #gal-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast-icon { color: #4ade80; display: flex; }
 
-    /* Responsive */
-    @media (max-width: 680px) {
-      .icon-modal { grid-template-columns: 1fr; max-height: 92vh; }
-      .modal-left { padding: 2.5rem 2rem; min-height: 220px; }
-      .modal-preview-wrap { width: 88px; height: 88px; }
-      .modal-preview-icon { width: 88px; height: 88px; }
-      .modal-preview-icon svg { width: 88px; height: 88px; }
-      .modal-preview-ring, .modal-preview-ring-2 { display: none; }
-      .modal-right { border-left: none; border-top: 1px solid rgba(48,54,61,0.5); }
+    /* ══════════════════════
+       RESPONSIVE
+    ══════════════════════ */
+    @media (max-width: 860px) {
+      .icon-modal {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        max-height: 94vh;
+      }
+      .modal-variants-panel {
+        border-right: none;
+        border-bottom: 1px solid rgba(48,54,61,0.5);
+        max-height: 160px;
+      }
+      .variant-list { flex-direction: row; overflow-x: auto; padding: 0 0.625rem 0.75rem; }
+      .variant-list-item { flex-shrink: 0; min-width: 80px; flex-direction: column; text-align: center; gap: 0.35rem; }
+      .variant-list-item.active::before { display: none; }
+      .modal-center { min-height: 280px; padding: 2rem 1.5rem; }
+      .modal-preview-icon { width: 110px; height: 110px; }
+      .modal-preview-icon svg { width: 110px; height: 110px; }
+      .modal-export-panel { border-left: none; border-top: 1px solid rgba(48,54,61,0.5); }
       .gallery-toolbar { padding: 0 1rem; }
       .gallery-main { padding: 1.25rem 1rem 5rem; }
       .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
@@ -621,429 +753,564 @@
     }
     @media (max-width: 480px) {
       .icon-modal-overlay { padding: 0; align-items: flex-end; }
-      .icon-modal {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        max-height: 95vh; width: 100%;
-      }
+      .icon-modal { border-bottom-left-radius: 0; border-bottom-right-radius: 0; max-height: 96vh; width: 100%; }
     }
-    .footer {
-      z-index: 10;
-    }
+
+    .footer { z-index: 10; }
   </style>
 </head>
 <body>
-  <div class="gallery-page">
-    <div class="gallery-ambient"></div>
+<div class="gallery-page">
+  <div class="gallery-ambient"></div>
 
-    <!-- Nav -->
-    <nav class="nav">
-      <a href="index.html" class="nav-logo">
-        <svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none">
-          <rect width="32" height="32" rx="8" fill="#288e45"/>
-          <rect x="5"  y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="13" y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="21" y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="5"  y="13" width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="21" y="13" width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="5"  y="21" width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="13" y="21" width="6" height="6" rx="1.5" fill="#fff"/>
-          <rect x="21" y="21" width="6" height="6" rx="1.5" fill="#fff"/>
-        </svg>
-        Bright Icons
-      </a>
-      <div class="nav-links">
-        <a href="editor.html" class="nav-btn">Open Editor</a>
-      </div>
-    </nav>
-
-    <!-- Toolbar -->
-    <div class="gallery-toolbar">
-      <div class="gallery-search-wrap">
-        <span class="gallery-search-icon">
-          <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-            <path d="M10 6.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-.691 3.516 2.838 2.837-.707.708-2.838-2.838A4.5 4.5 0 1 1 9.31 10.016Z" fill="currentColor"/>
-          </svg>
-        </span>
-        <input class="gallery-search" id="galSearch" type="text" placeholder="Search icons…" autocomplete="off" spellcheck="false"/>
-      </div>
-
-      <div class="toolbar-right">
-        <span class="count-pill" id="galCount"><strong>—</strong>&nbsp;icons</span>
-        <div class="toolbar-divider"></div>
-        <div class="view-toggle">
-          <button class="view-btn" id="viewCompact" title="Compact" onclick="setView('compact')">
-            <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-              <path d="M1 1h3v3H1V1Zm5 0h3v3H6V1Zm5 0h3v3h-3V1ZM1 6h3v3H1V6Zm5 0h3v3H6V6Zm5 0h3v3h-3V6ZM1 11h3v3H1v-3Zm5 0h3v3H6v-3Zm5 0h3v3h-3v-3Z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="view-btn active" id="viewLarge" title="Large" onclick="setView('large')">
-            <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-              <path d="M1 1h6v6H1V1Zm7 0h6v6H8V1ZM1 8h6v6H1V8Zm7 0h6v6H8V8Z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="view-btn" id="viewList" title="List" onclick="setView('list')">
-            <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-              <path d="M1 3h13v1H1V3Zm0 4h13v1H1V7Zm0 4h13v1H1v-1Z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Grid -->
-    <div class="gallery-main">
-      <div class="gallery-section-label" id="galLabel">All Icons</div>
-      <div class="gallery-grid view-large" id="galGrid">
-        <div class="gallery-state">
-          <div class="gallery-spinner"></div>
-          Loading icons…
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <p>© 2026 Niko Marinović. All rights reserved.</p>
-      <br>
-      <a href="https://github.com/nikomarinovic" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.11.78-.25.78-.56v-2.02c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.68 5.41-5.23 5.7.41.36.77 1.08.77 2.18v3.23c0 .31.21.68.79.56A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5z"/>
-        </svg>
-      </a>
-    </footer>
-  </div>
-
-  <!-- MODAL -->
-  <div class="icon-modal-overlay" id="iconModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
-    <div class="icon-modal">
-
-      <button class="modal-close-btn" id="modalClose" aria-label="Close">
-        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-          <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-        </svg>
-      </button>
-
-      <!-- Left: Preview -->
-      <div class="modal-left" id="modalLeft">
-        <div class="modal-preview-wrap">
-          <div class="modal-preview-ring"></div>
-          <div class="modal-preview-ring-2"></div>
-          <div class="modal-preview-icon" id="modalPreviewIcon"></div>
-        </div>
-      </div>
-
-      <!-- Right -->
-      <div class="modal-right">
-
-        <div class="modal-header">
-          <div class="modal-icon-name" id="modalName">—</div>
-          <div class="modal-badges" id="modalBadges"></div>
-        </div>
-
-        <!-- Variants — hidden if no dark -->
-        <div class="modal-section" id="modalVariantSection" style="display:none">
-          <div class="modal-section-title">Variants</div>
-          <div class="variant-grid">
-            <div class="variant-card active" data-v="light" id="vCardLight">
-              <div class="variant-card-bg dark-bg">
-                <div class="variant-icon" id="vIconLight"></div>
-              </div>
-              <span class="variant-card-label">Light</span>
-            </div>
-            <div class="variant-card" data-v="dark" id="vCardDark">
-              <div class="variant-card-bg light-bg">
-                <div class="variant-icon" id="vIconDark"></div>
-              </div>
-              <span class="variant-card-label">Dark</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Export -->
-        <div class="modal-section">
-          <div class="modal-section-title">Export</div>
-          <div class="export-list">
-            <button class="exp-btn primary" id="expSVG">
-              <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
-                <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
-              </svg>
-              Download SVG <span class="exp-tag">SVG</span>
-            </button>
-            <button class="exp-btn" id="expPNG">
-              <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
-                <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
-              </svg>
-              Download PNG <span class="exp-tag">512px</span>
-            </button>
-            <button class="exp-btn" id="expJPG">
-              <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
-                <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
-              </svg>
-              Download JPG <span class="exp-tag">512px</span>
-            </button>
-            <button class="exp-btn" id="expCopySVG">
-              <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
-                <path d="M5 2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L10.5 2H5ZM4 1h6.5L14 4.5V12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3a2 2 0 0 1 1-1.732V1ZM1 4a1 1 0 0 1 1-1h1v1H2v9h6v-1h1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Z" fill="currentColor"/>
-              </svg>
-              Copy SVG Code <span class="exp-tag">CODE</span>
-            </button>
-          </div>
-        </div>
-
-      </div><!-- /modal-right -->
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="gal-toast">
-    <span class="toast-icon">
-      <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-        <path d="M11.467 3.727c.289.286.29.751.002 1.04L6.12 10.149a.75.75 0 0 1-1.076-.026L3.03 7.888a.75.75 0 1 1 1.093-1.028l1.49 1.588 4.85-4.723a.75.75 0 0 1 1.004.002Z" fill="currentColor"/>
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none">
+        <rect width="32" height="32" rx="8" fill="#288e45"/>
+        <rect x="5"  y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="13" y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="21" y="5"  width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="5"  y="13" width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="21" y="13" width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="5"  y="21" width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="13" y="21" width="6" height="6" rx="1.5" fill="#fff"/>
+        <rect x="21" y="21" width="6" height="6" rx="1.5" fill="#fff"/>
       </svg>
-    </span>
-    <span id="gal-toast-msg">Done!</span>
+      Bright Icons
+    </a>
+    <div class="nav-links">
+      <a href="editor.html" class="nav-btn">Open Editor</a>
+    </div>
+  </nav>
+
+  <!-- Toolbar -->
+  <div class="gallery-toolbar">
+    <div class="gallery-search-wrap">
+      <span class="gallery-search-icon">
+        <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
+          <path d="M10 6.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-.691 3.516 2.838 2.837-.707.708-2.838-2.838A4.5 4.5 0 1 1 9.31 10.016Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <input class="gallery-search" id="galSearch" type="text" placeholder="Search icons…" autocomplete="off" spellcheck="false"/>
+    </div>
+    <div class="toolbar-right">
+      <span class="count-pill" id="galCount"><strong>—</strong>&nbsp;icons</span>
+      <div class="toolbar-divider"></div>
+      <div class="view-toggle">
+        <button class="view-btn" id="viewCompact" title="Compact" onclick="setView('compact')">
+          <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
+            <path d="M1 1h3v3H1V1Zm5 0h3v3H6V1Zm5 0h3v3h-3V1ZM1 6h3v3H1V6Zm5 0h3v3H6V6Zm5 0h3v3h-3V6ZM1 11h3v3H1v-3Zm5 0h3v3H6v-3Zm5 0h3v3h-3v-3Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="view-btn active" id="viewLarge" title="Large" onclick="setView('large')">
+          <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
+            <path d="M1 1h6v6H1V1Zm7 0h6v6H8V1ZM1 8h6v6H1V8Zm7 0h6v6H8V8Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="view-btn" id="viewList" title="List" onclick="setView('list')">
+          <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
+            <path d="M1 3h13v1H1V3Zm0 4h13v1H1V7Zm0 4h13v1H1v-1Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <script src="js/icon-registry.js"></script>
-  <script>
-    const galGrid             = document.getElementById('galGrid');
-    const galSearch           = document.getElementById('galSearch');
-    const galCount            = document.getElementById('galCount');
-    const galLabel            = document.getElementById('galLabel');
-    const toast               = document.getElementById('gal-toast');
-    const toastMsg            = document.getElementById('gal-toast-msg');
-    const modal               = document.getElementById('iconModal');
-    const modalClose          = document.getElementById('modalClose');
-    const modalName           = document.getElementById('modalName');
-    const modalBadges         = document.getElementById('modalBadges');
-    const modalPreviewIcon    = document.getElementById('modalPreviewIcon');
-    const modalVariantSection = document.getElementById('modalVariantSection');
-    const vCardLight          = document.getElementById('vCardLight');
-    const vCardDark           = document.getElementById('vCardDark');
-    const vIconLight          = document.getElementById('vIconLight');
-    const vIconDark           = document.getElementById('vIconDark');
-    const expSVG              = document.getElementById('expSVG');
-    const expPNG              = document.getElementById('expPNG');
-    const expJPG              = document.getElementById('expJPG');
-    const expCopySVG          = document.getElementById('expCopySVG');
+  <!-- Grid -->
+  <div class="gallery-main">
+    <div class="gallery-section-label" id="galLabel">All Icons</div>
+    <div class="gallery-grid view-large" id="galGrid">
+      <div class="gallery-state">
+        <div class="gallery-spinner"></div>
+        Loading icons…
+      </div>
+    </div>
+  </div>
 
-    let allIcons = [], activeIcon = null, activeVariant = 'light', toastTimer;
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 Niko Marinović. All rights reserved.</p>
+    <br>
+    <a href="https://github.com/nikomarinovic" target="_blank" rel="noopener noreferrer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.11.78-.25.78-.56v-2.02c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.68 5.41-5.23 5.7.41.36.77 1.08.77 2.18v3.23c0 .31.21.68.79.56A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5z"/>
+      </svg>
+    </a>
+  </footer>
+</div>
 
-    /* ── Helpers ── */
-    function showToast(msg) {
-      toastMsg.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
-    }
+<!-- ══════════════════════════════════════════════
+     MODAL — 3-column
+══════════════════════════════════════════════ -->
+<div class="icon-modal-overlay" id="iconModal" role="dialog" aria-modal="true" aria-labelledby="mvpIconName">
+  <div class="icon-modal">
 
-    function activeCode() {
-      return activeVariant === 'dark' && activeIcon.hasDark
-        ? activeIcon.darkCode : activeIcon.lightCode;
-    }
+    <button class="modal-close-btn" id="modalClose" aria-label="Close">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+        <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+    </button>
 
-    /**
-     * Parse an SVG string and force width/height attributes so it
-     * fills its container without distortion. Returns the SVG element.
-     */
-    function parseSVG(code) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(code, 'image/svg+xml');
-      const svg = doc.documentElement;
+    <!-- LEFT: Variants list -->
+    <div class="modal-variants-panel" id="modalVariantsPanel">
+      <div class="mvp-header">
+        <div class="mvp-icon-name" id="mvpIconName">—</div>
+        <div class="mvp-subtitle" id="mvpSubtitle">—</div>
+      </div>
+      <div class="mvp-section-label">Variants</div>
+      <div class="variant-list" id="variantList"></div>
+    </div>
 
-      // Ensure viewBox exists — derive from width/height if missing
-      if (!svg.getAttribute('viewBox')) {
-        const w = svg.getAttribute('width') || '24';
-        const h = svg.getAttribute('height') || '24';
-        svg.setAttribute('viewBox', `0 0 ${parseFloat(w)} ${parseFloat(h)}`);
+    <!-- CENTER: Preview -->
+    <div class="modal-center">
+      <div class="modal-center-grid"></div>
+      <div class="modal-preview-wrap">
+        <div class="modal-preview-ring"></div>
+        <div class="modal-preview-ring-2"></div>
+        <div class="modal-preview-icon" id="modalPreviewIcon"></div>
+      </div>
+
+      <!-- Variant label chip -->
+      <div class="preview-variant-chip" id="previewVariantChip">default</div>
+    </div>
+
+    <!-- RIGHT: Export -->
+    <div class="modal-export-panel">
+
+      <div class="mep-section">
+        <div class="mep-label">Download</div>
+        <div class="export-list">
+          <button class="exp-btn primary" id="expSVG">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+              <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
+            </svg>
+            Download SVG <span class="exp-tag">SVG</span>
+          </button>
+          <button class="exp-btn" id="expPNG">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+              <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
+            </svg>
+            Download PNG <span class="exp-tag">512px</span>
+          </button>
+          <button class="exp-btn" id="expJPG">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+              <path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/>
+            </svg>
+            Download JPG <span class="exp-tag">512px</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mep-section">
+        <div class="mep-label">Clipboard</div>
+        <div class="export-list">
+          <button class="exp-btn" id="expCopySVG">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+              <path d="M5 2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L10.5 2H5ZM4 1h6.5L14 4.5V12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3a2 2 0 0 1 1-1.732V1ZM1 4a1 1 0 0 1 1-1h1v1H2v9h6v-1h1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Z" fill="currentColor"/>
+            </svg>
+            Copy SVG Code <span class="exp-tag">CODE</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mep-section">
+        <div class="mep-label">Info</div>
+        <div class="mep-info-row">
+          <span class="mep-info-key">Format</span>
+          <span class="mep-info-val">SVG</span>
+        </div>
+        <div class="mep-info-row">
+          <span class="mep-info-key">Variants</span>
+          <span class="mep-info-val" id="infoVariants">—</span>
+        </div>
+        <div class="mep-info-row">
+          <span class="mep-info-key">Current</span>
+          <span class="mep-info-val" id="infoCurrent">—</span>
+        </div>
+      </div>
+
+    </div><!-- /modal-export-panel -->
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="gal-toast">
+  <span class="toast-icon">
+    <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
+      <path d="M11.467 3.727c.289.286.29.751.002 1.04L6.12 10.149a.75.75 0 0 1-1.076-.026L3.03 7.888a.75.75 0 1 1 1.093-1.028l1.49 1.588 4.85-4.723a.75.75 0 0 1 1.004.002Z" fill="currentColor"/>
+    </svg>
+  </span>
+  <span id="gal-toast-msg">Done!</span>
+</div>
+
+<script src="js/icon-registry.js"></script>
+<script>
+  /* ══════════════════════════════════════════════
+     GALLERY — multi-variant support
+     JSON format: { name, variants: { variantName: { lightCode, darkCode } } }
+     Legacy format: { name, lightCode, darkCode, hasDark }  → normalised
+     Flat variant list: every light/dark file = its own clickable item.
+  ══════════════════════════════════════════════ */
+
+  const galGrid          = document.getElementById('galGrid');
+  const galSearch        = document.getElementById('galSearch');
+  const galCount         = document.getElementById('galCount');
+  const galLabel         = document.getElementById('galLabel');
+  const toast            = document.getElementById('gal-toast');
+  const toastMsg         = document.getElementById('gal-toast-msg');
+  const modal            = document.getElementById('iconModal');
+  const modalClose       = document.getElementById('modalClose');
+  const mvpIconName      = document.getElementById('mvpIconName');
+  const mvpSubtitle      = document.getElementById('mvpSubtitle');
+  const variantList      = document.getElementById('variantList');
+  const modalPreviewIcon = document.getElementById('modalPreviewIcon');
+  const previewVariantChip = document.getElementById('previewVariantChip');
+  const infoVariants     = document.getElementById('infoVariants');
+  const infoCurrent      = document.getElementById('infoCurrent');
+  const expSVG           = document.getElementById('expSVG');
+  const expPNG           = document.getElementById('expPNG');
+  const expJPG           = document.getElementById('expJPG');
+  const expCopySVG       = document.getElementById('expCopySVG');
+
+  let allIcons     = [];
+  let activeIcon   = null;
+  let activeFlatKey = '';  // e.g. "default", "default_dark", "label", "label_dark"
+  let toastTimer;
+
+  /* ── Normalise legacy → new format ── */
+  function normaliseIcon(raw) {
+    if (raw.variants) return raw;
+    return {
+      name: raw.name,
+      variants: {
+        default: { lightCode: raw.lightCode, darkCode: raw.darkCode || null }
+      }
+    };
+  }
+
+  /**
+   * Build a flat list of all selectable variant-mode combos.
+   * Each entry: { key, label, isDark, code, thumbCode }
+   *   key   = unique string like "default", "default_dark", "label", "label_dark"
+   *   label = human-readable e.g. "Default", "Default · Dark", "Label", "Label · Dark"
+   */
+  function flatVariants(icon) {
+    const items = [];
+    for (const [vName, vData] of Object.entries(icon.variants)) {
+      // Use the label from JSON if present, otherwise fall back to capitalize
+      const baseName = vData.label || (vName === 'default' ? 'Default' : capitalize(vName));
+
+      if (vData.lightCode) {
+        items.push({
+          key:       vName,
+          label:     baseName,
+          isDark:    false,
+          code:      vData.lightCode,
+          thumbCode: vData.lightCode,
+        });
       }
 
-      // Remove fixed width/height so CSS controls the size
-      svg.removeAttribute('width');
-      svg.removeAttribute('height');
-      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-      return svg;
+      if (vData.darkCode) {
+        // For the dark entry, replace the first segment with just the last word · Dark
+        // e.g. "Bmw · Monocolor" → "Monocolor · Dark"
+        //      "Default"         → "Default · Dark"
+        const lastWord = baseName.includes(' · ')
+          ? baseName.split(' · ').pop()
+          : baseName;
+        items.push({
+          key:       vName + '_dark',
+          label:     lastWord + ' · Dark',
+          isDark:    true,
+          code:      vData.darkCode,
+          thumbCode: vData.darkCode,
+        });
+      }
     }
 
-    function injectSVG(container, code) {
-      container.innerHTML = '';
-      container.appendChild(parseSVG(code));
-    }
-
-    /* ── Variant cards ── */
-    [vCardLight, vCardDark].forEach(card => {
-      card.addEventListener('click', () => {
-        activeVariant = card.dataset.v;
-        vCardLight.classList.toggle('active', activeVariant === 'light');
-        vCardDark.classList.toggle('active',  activeVariant === 'dark');
-        // Swap preview with transition
-        modalPreviewIcon.classList.add('swapping');
-        setTimeout(() => {
-          injectSVG(modalPreviewIcon, activeCode());
-          modalPreviewIcon.classList.remove('swapping');
-        }, 130);
-      });
+    // Sort: default first, then default_dark, then each variant + its dark, alphabetically
+    items.sort((a, b) => {
+      const rank = key => {
+        if (key === 'default')      return 0;
+        if (key === 'default_dark') return 1;
+        const isDark = key.endsWith('_dark');
+        const base   = isDark ? key.slice(0, -5) : key;
+        return base + (isDark ? '\x01' : '\x00');
+      };
+      const ra = rank(a.key), rb = rank(b.key);
+      if (typeof ra === 'number' && typeof rb === 'number') return ra - rb;
+      if (typeof ra === 'number') return -1;
+      if (typeof rb === 'number') return 1;
+      return ra < rb ? -1 : ra > rb ? 1 : 0;
     });
 
-    /* ── Modal open / close ── */
-    function openModal(icon) {
-      activeIcon = icon;
-      activeVariant = 'light';
+    return items;
+  }
 
-      modalName.textContent = icon.name;
-      modalBadges.innerHTML =
-        `<span class="mbadge grey">SVG</span>` +
-        (icon.hasDark
-          ? `<span class="mbadge green"><svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg>Light &amp; Dark</span>`
-          : '');
+  function capitalize(s) {
+    return s.split('_').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' · ');
+  }
 
-      // Main preview
-      injectSVG(modalPreviewIcon, icon.lightCode);
+  /* ── Helpers ── */
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
 
-      // Variants
-      if (icon.hasDark) {
-        modalVariantSection.style.display = 'block';
-        injectSVG(vIconLight, icon.lightCode);
-        injectSVG(vIconDark,  icon.darkCode);
-        vCardLight.classList.add('active');
-        vCardDark.classList.remove('active');
-      } else {
-        modalVariantSection.style.display = 'none';
+  function activeItemData() {
+    return flatVariants(activeIcon).find(v => v.key === activeFlatKey)
+        || flatVariants(activeIcon)[0];
+  }
+
+  function activeCode() { return activeItemData().code; }
+
+  function parseSVG(code) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(code, 'image/svg+xml');
+    const svg = doc.documentElement;
+    if (!svg.getAttribute('viewBox')) {
+      const w = svg.getAttribute('width') || '24';
+      const h = svg.getAttribute('height') || '24';
+      svg.setAttribute('viewBox', `0 0 ${parseFloat(w)} ${parseFloat(h)}`);
+    }
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    return svg;
+  }
+
+  function injectSVG(container, code) {
+    container.innerHTML = '';
+    if (code) container.appendChild(parseSVG(code));
+  }
+
+  function swapPreview(instant) {
+    const item = activeItemData();
+    if (instant) { injectSVG(modalPreviewIcon, item.code); return; }
+    modalPreviewIcon.classList.add('swapping');
+    setTimeout(() => {
+      injectSVG(modalPreviewIcon, item.code);
+      modalPreviewIcon.classList.remove('swapping');
+    }, 130);
+  }
+
+  /* ── Build variant list (left panel) ── */
+  function buildVariantList() {
+    variantList.innerHTML = '';
+    const items = flatVariants(activeIcon);
+
+    items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'variant-list-item' + (item.key === activeFlatKey ? ' active' : '');
+      el.dataset.key = item.key;
+
+      const thumb = document.createElement('div');
+      thumb.className = 'vli-thumb' + (item.isDark ? ' dark-bg' : '');
+      thumb.appendChild(parseSVG(item.thumbCode));
+
+      const info = document.createElement('div');
+      info.className = 'vli-info';
+
+      const name = document.createElement('div');
+      name.className = 'vli-name';
+      name.textContent = item.label;
+
+      info.appendChild(name);
+      el.appendChild(thumb);
+      el.appendChild(info);
+
+      el.addEventListener('click', () => selectItem(item.key));
+      variantList.appendChild(el);
+    });
+  }
+
+  function selectItem(key) {
+    activeFlatKey = key;
+
+    // Update list highlight
+    variantList.querySelectorAll('.variant-list-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.key === key);
+    });
+
+    const item = activeItemData();
+    previewVariantChip.textContent = item.label;
+    infoCurrent.textContent = item.label;
+
+    swapPreview();
+    resetExportBtns();
+  }
+
+  /* ── Open / close modal ── */
+  function openModal(icon) {
+    activeIcon = icon;
+    const items = flatVariants(icon);
+    activeFlatKey = items[0]?.key || 'default';
+
+    mvpIconName.textContent = icon.name;
+    const total = items.length;
+    mvpSubtitle.textContent = `${total} variant${total !== 1 ? 's' : ''}`;
+    infoVariants.textContent = total;
+
+    buildVariantList();
+
+    const first = items[0];
+    previewVariantChip.textContent = first?.label || 'Default';
+    infoCurrent.textContent = first?.label || 'Default';
+    injectSVG(modalPreviewIcon, first?.code || '');
+
+    resetExportBtns();
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  modalClose.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === '/' && !modal.classList.contains('open') && document.activeElement !== galSearch) {
+      e.preventDefault();
+      galSearch.focus();
+    }
+  });
+
+  /* ── Export buttons ── */
+  const DL_ICON = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/></svg>`;
+  const CP_ICON = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M5 2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L10.5 2H5ZM4 1h6.5L14 4.5V12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3a2 2 0 0 1 1-1.732V1ZM1 4a1 1 0 0 1 1-1h1v1H2v9h6v-1h1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Z" fill="currentColor"/></svg>`;
+  const OK_ICON = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M11.467 3.727c.289.286.29.751.002 1.04L6.12 10.149a.75.75 0 0 1-1.076-.026L3.03 7.888a.75.75 0 1 1 1.093-1.028l1.49 1.588 4.85-4.723a.75.75 0 0 1 1.004.002Z" fill="currentColor"/></svg>`;
+
+  function resetExportBtns() {
+    expSVG.innerHTML     = `${DL_ICON} Download SVG <span class="exp-tag">SVG</span>`;
+    expPNG.innerHTML     = `${DL_ICON} Download PNG <span class="exp-tag">512px</span>`;
+    expJPG.innerHTML     = `${DL_ICON} Download JPG <span class="exp-tag">512px</span>`;
+    expCopySVG.innerHTML = `${CP_ICON} Copy SVG Code <span class="exp-tag">CODE</span>`;
+    expCopySVG.classList.remove('success');
+  }
+
+  function filename(ext) {
+    // e.g. mclaren_label_dark.svg
+    const key = activeFlatKey === 'default' ? '' : `_${activeFlatKey}`;
+    return `${activeIcon.name}${key}.${ext}`;
+  }
+
+  expSVG.addEventListener('click', async () => {
+    try { await downloadAs(activeCode(), filename('svg'), 'svg'); showToast(`${filename('svg')} downloaded`); }
+    catch { showToast('Download failed'); }
+  });
+  expPNG.addEventListener('click', async () => {
+    expPNG.textContent = 'Generating…';
+    try { await downloadAs(activeCode(), filename('png'), 'png'); showToast(`${filename('png')} downloaded`); }
+    catch { showToast('PNG export failed'); }
+    expPNG.innerHTML = `${DL_ICON} Download PNG <span class="exp-tag">512px</span>`;
+  });
+  expJPG.addEventListener('click', async () => {
+    expJPG.textContent = 'Generating…';
+    try { await downloadAs(activeCode(), filename('jpg'), 'jpg'); showToast(`${filename('jpg')} downloaded`); }
+    catch { showToast('JPG export failed'); }
+    expJPG.innerHTML = `${DL_ICON} Download JPG <span class="exp-tag">512px</span>`;
+  });
+  expCopySVG.addEventListener('click', async () => {
+    try {
+      await copyIconSVG(activeCode());
+      expCopySVG.classList.add('success');
+      expCopySVG.innerHTML = `${OK_ICON} Copied to clipboard <span class="exp-tag">✓</span>`;
+      showToast('SVG code copied to clipboard');
+      setTimeout(resetExportBtns, 2500);
+    } catch { showToast('Copy failed — try again'); }
+  });
+
+  /* ── View toggle ── */
+  function setView(v) {
+    galGrid.className = 'gallery-grid' + (v === 'large' ? ' view-large' : v === 'list' ? ' view-list' : '');
+    document.getElementById('viewCompact').classList.toggle('active', v === 'compact');
+    document.getElementById('viewLarge').classList.toggle('active',   v === 'large');
+    document.getElementById('viewList').classList.toggle('active',    v === 'list');
+  }
+
+  /* ── Grid rendering ── */
+  function filtered() {
+    const q = galSearch.value.trim().toLowerCase();
+    return q ? allIcons.filter(i => i.name.toLowerCase().includes(q)) : allIcons;
+  }
+
+  function renderGrid(icons) {
+    const q = galSearch.value.trim();
+    galLabel.textContent = q ? `Search: "${q}"` : 'All Icons';
+
+    if (!icons.length) {
+      galGrid.innerHTML = `<div class="gallery-state">No results for "<em>${q}</em>"</div>`;
+      galCount.innerHTML = `<strong>0</strong>&nbsp;icons`;
+      return;
+    }
+
+    galCount.innerHTML = `<strong>${icons.length}</strong>&nbsp;icon${icons.length !== 1 ? 's' : ''}`;
+    galGrid.innerHTML  = '';
+
+    icons.forEach((icon, i) => {
+      const defaultVariant = icon.variants['default'] || Object.values(icon.variants)[0];
+      const totalFlat = flatVariants(icon).length;
+      const hasMultiple = totalFlat > 1;
+
+      const tile = document.createElement('div');
+      tile.className = 'gal-tile';
+      tile.style.animationDelay = `${Math.min(i * 6, 300)}ms`;
+      tile.dataset.name = icon.name;
+
+      // Green dot if icon has more than one selectable style
+      if (hasMultiple) {
+        const dot = document.createElement('span');
+        dot.className = 'gal-dark-dot';
+        dot.title = `${totalFlat} variants available`;
+        tile.appendChild(dot);
       }
 
-      resetExportBtns();
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-    modalClose.addEventListener('click', closeModal);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-      if (e.key === '/' && !modal.classList.contains('open') && document.activeElement !== galSearch) {
-        e.preventDefault();
-        galSearch.focus();
+      const iconWrap = document.createElement('div');
+      iconWrap.className = 'tile-icon';
+      if (defaultVariant?.lightCode) {
+        iconWrap.appendChild(parseSVG(defaultVariant.lightCode));
       }
-    });
+      tile.appendChild(iconWrap);
 
-    /* ── Export buttons ── */
-    function resetExportBtns() {
-      expCopySVG.classList.remove('success');
-      expCopySVG.innerHTML = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M5 2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L10.5 2H5ZM4 1h6.5L14 4.5V12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3a2 2 0 0 1 1-1.732V1ZM1 4a1 1 0 0 1 1-1h1v1H2v9h6v-1h1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Z" fill="currentColor"/></svg> Copy SVG Code <span class="exp-tag">CODE</span>`;
+      const label = document.createElement('span');
+      label.className = 'gal-tile-name';
+      label.textContent = icon.name;
+      tile.appendChild(label);
+
+      galGrid.appendChild(tile);
+    });
+  }
+
+  galGrid.addEventListener('click', e => {
+    const tile = e.target.closest('.gal-tile');
+    if (!tile) return;
+    const icon = allIcons.find(i => i.name === tile.dataset.name);
+    if (icon) openModal(icon);
+  });
+
+  galSearch.addEventListener('input', () => renderGrid(filtered()));
+
+  /* ── Init ── */
+  (async () => {
+    try {
+      const raw = await loadIcons();
+      allIcons  = raw.map(normaliseIcon);
+      renderGrid(allIcons);
+    } catch (err) {
+      galGrid.innerHTML = `<div class="gallery-state">
+        Could not load icons.<br>
+        Run <code>cd public/dev && python generate_icons.py</code> to generate <code>data/icons.json</code>.<br><br>
+        <small style="opacity:0.5">${err.message}</small>
+      </div>`;
+      console.error(err);
     }
-
-    expSVG.addEventListener('click', async () => {
-      try { await downloadAs(activeCode(), `${activeIcon.name}.svg`, 'svg'); showToast(`${activeIcon.name}.svg downloaded`); }
-      catch { showToast('Download failed'); }
-    });
-    expPNG.addEventListener('click', async () => {
-      expPNG.textContent = 'Generating…';
-      try { await downloadAs(activeCode(), `${activeIcon.name}.png`, 'png'); showToast(`${activeIcon.name}.png downloaded`); }
-      catch { showToast('PNG export failed'); }
-      expPNG.innerHTML = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/></svg> Download PNG <span class="exp-tag">512px</span>`;
-    });
-    expJPG.addEventListener('click', async () => {
-      expJPG.textContent = 'Generating…';
-      try { await downloadAs(activeCode(), `${activeIcon.name}.jpg`, 'jpg'); showToast(`${activeIcon.name}.jpg downloaded`); }
-      catch { showToast('JPG export failed'); }
-      expJPG.innerHTML = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M7.5 1a.5.5 0 0 1 .5.5v8.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7 10.293V1.5a.5.5 0 0 1 .5-.5ZM2 13a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 2 13Z" fill="currentColor"/></svg> Download JPG <span class="exp-tag">512px</span>`;
-    });
-    expCopySVG.addEventListener('click', async () => {
-      try {
-        await copyIconSVG(activeCode());
-        expCopySVG.classList.add('success');
-        expCopySVG.innerHTML = `<svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M11.467 3.727c.289.286.29.751.002 1.04L6.12 10.149a.75.75 0 0 1-1.076-.026L3.03 7.888a.75.75 0 1 1 1.093-1.028l1.49 1.588 4.85-4.723a.75.75 0 0 1 1.004.002Z" fill="currentColor"/></svg> Copied to clipboard <span class="exp-tag">✓</span>`;
-        showToast('SVG code copied to clipboard');
-        setTimeout(resetExportBtns, 2500);
-      } catch { showToast('Copy failed — try again'); }
-    });
-
-    /* ── View toggle ── */
-    function setView(v) {
-      galGrid.className = 'gallery-grid' + (v === 'large' ? ' view-large' : v === 'list' ? ' view-list' : '');
-      document.getElementById('viewCompact').classList.toggle('active', v === 'compact');
-      document.getElementById('viewLarge').classList.toggle('active',   v === 'large');
-      document.getElementById('viewList').classList.toggle('active',    v === 'list');
-    }
-
-    /* ── Grid rendering ── */
-    function filtered() {
-      const q = galSearch.value.trim().toLowerCase();
-      return q ? allIcons.filter(i => i.name.toLowerCase().includes(q)) : allIcons;
-    }
-
-    function renderGrid(icons) {
-      const q = galSearch.value.trim();
-      galLabel.textContent = q ? `Search: "${q}"` : 'All Icons';
-
-      if (!icons.length) {
-        galGrid.innerHTML = `<div class="gallery-state">No results for "<em>${q}</em>"</div>`;
-        galCount.innerHTML = `<strong>0</strong>&nbsp;icons`;
-        return;
-      }
-
-      galCount.innerHTML = `<strong>${icons.length}</strong>&nbsp;icon${icons.length !== 1 ? 's' : ''}`;
-
-      // Build tiles — inject SVG inline, no blob URLs
-      galGrid.innerHTML = '';
-      icons.forEach((icon, i) => {
-        const tile = document.createElement('div');
-        tile.className = 'gal-tile';
-        tile.style.animationDelay = `${Math.min(i * 6, 300)}ms`;
-        tile.dataset.name = icon.name;
-
-        if (icon.hasDark) {
-          const dot = document.createElement('span');
-          dot.className = 'gal-dark-dot';
-          dot.title = 'Has dark variant';
-          tile.appendChild(dot);
-        }
-
-        const iconWrap = document.createElement('div');
-        iconWrap.className = 'tile-icon';
-        iconWrap.appendChild(parseSVG(icon.lightCode));
-        tile.appendChild(iconWrap);
-
-        const label = document.createElement('span');
-        label.className = 'gal-tile-name';
-        label.textContent = icon.name;
-        tile.appendChild(label);
-
-        galGrid.appendChild(tile);
-      });
-    }
-
-    galGrid.addEventListener('click', e => {
-      const tile = e.target.closest('.gal-tile');
-      if (!tile) return;
-      const icon = allIcons.find(i => i.name === tile.dataset.name);
-      if (icon) openModal(icon);
-    });
-
-    galSearch.addEventListener('input', () => renderGrid(filtered()));
-
-    /* ── Init ── */
-    (async () => {
-      try {
-        allIcons = await loadIcons();
-        renderGrid(allIcons);
-      } catch (err) {
-        galGrid.innerHTML = `<div class="gallery-state">
-          Could not load icons.<br>
-          Run <code>cd public/dev && python generate_icons.py</code> to generate <code>data/icons.json</code>.<br><br>
-          <small style="opacity:0.5">${err.message}</small>
-        </div>`;
-        console.error(err);
-      }
-    })();
-  </script>
+  })();
+</script>
 </body>
 </html>
