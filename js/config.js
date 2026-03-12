@@ -5,7 +5,7 @@
    ═══════════════════════════════════════════ */
 const SITE_CONFIG = {
   maintenance:       false,
-  mobileRedirect:    true,
+  mobileRedirect:    false,
   mobileBreakpoint:  1024,
   disableRightClick: true,
   pages: {
