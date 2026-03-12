@@ -49,6 +49,9 @@ Creating your perfect icon is fast and intuitive:
 <p align="center">
   <img src="public/screenshot.png" alt="Bright Icons Generator Example" width="700" />
 </p>
+<p align="center">
+  <img src="public/screenshot-2.png" alt="Bright Icons Gallery Example" width="700" />
+</p>
 
 ---
 
