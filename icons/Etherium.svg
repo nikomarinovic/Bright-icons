@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256 256" width="256" height="256">
+  <defs><clipPath id="bgc"><rect width="256" height="256" rx="51.2"/></clipPath><filter id="f_o69" color-interpolation-filters="sRGB"><feFlood flood-color="#3C3C3D" result="c"/><feComposite in="c" in2="SourceAlpha" operator="in"/></filter></defs>
+  <rect width="256" height="256" rx="51.2" fill="#f5f5f5"/>
+  
+  <g opacity="1" transform="translate(128,128) rotate(0)" filter="url(#f_o69)"><svg x="-76.8" y="-76.8" width="153.6" height="153.6" viewBox="0 0 226.777 226.777"><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_bgCarrier" stroke-width="0"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_iconCarrier"> <g> <polygon fill="#231F20" points="112.553,157 112.553,86.977 44.158,116.937 "/> <polygon fill="#231F20" points="112.553,82.163 112.553,-0.056 46.362,111.156 "/> <polygon fill="#231F20" points="116.962,-0.09 116.962,82.163 184.083,111.566 "/> <polygon fill="#231F20" points="116.962,86.977 116.962,157.002 185.405,116.957 "/> <polygon fill="#231F20" points="112.553,227.406 112.553,171.085 44.618,131.31 "/> <polygon fill="#231F20" points="116.962,227.406 184.897,131.31 116.962,171.085 "/> </g> </g></svg></g>
+  
+</svg>
