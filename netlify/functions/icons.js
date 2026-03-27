@@ -1,66 +1,69 @@
 const fs = require("fs");
 const path = require("path");
 
+let iconsMap = null;
+
+function loadIcons() {
+  if (iconsMap) return iconsMap;
+  const jsonPath = path.join(process.cwd(), "data", "icons.json");
+  const raw = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+  iconsMap = {};
+  for (const icon of raw) {
+    const key = icon.name.toLowerCase();
+    const def = icon.variants?.default;
+    if (def) {
+      iconsMap[key] = {
+        light: def.lightCode || def.darkCode || null,
+        dark: def.darkCode || def.lightCode || null,
+      };
+    }
+  }
+  return iconsMap;
+}
+
+function extractInnerSVG(svgString) {
+  if (!svgString) return null;
+  const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
+  const innerMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+  if (!innerMatch) return null;
+  return {
+    inner: innerMatch[1].trim(),
+    viewBox: viewBoxMatch ? viewBoxMatch[1] : "0 0 256 256",
+  };
+}
+
 exports.handler = async function (event) {
   const params = event.queryStringParameters || {};
-  const iconNames = (params.i || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+  const iconNames = (params.i || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
   const theme = params.theme === "dark" ? "dark" : "light";
   const size = Math.min(Math.max(parseInt(params.size) || 48, 16), 128);
   const spacing = Math.min(Math.max(parseInt(params.spacing) || 12, 0), 64);
-  const perline = Math.min(Math.max(parseInt(params.perline) || 0, 1), 50); // 0 = no wrap
+  const perline = parseInt(params.perline) || 0;
 
   if (!iconNames.length) {
-    return {
-      statusCode: 400,
-      body: "Missing ?i= parameter",
-    };
+    return { statusCode: 400, body: "Missing ?i= parameter" };
   }
 
-  // Icons folder is relative to the function's location.
-  // In Netlify, __dirname for a function in /netlify/functions/ won't reach /icons directly.
-  // Use process.cwd() which is the site root, then look in /icons.
-  const iconsDir = path.join(process.cwd(), "icons");
+  let icons;
+  try {
+    icons = loadIcons();
+  } catch (e) {
+    return { statusCode: 500, body: "Could not load icons.json: " + e.message };
+  }
 
-  const svgContents = [];
-
+  const resolved = [];
   for (const name of iconNames) {
-    const darkFile = path.join(iconsDir, `${name}_dark.svg`);
-    const lightFile = path.join(iconsDir, `${name}.svg`);
-
-    let filePath = null;
-    if (theme === "dark" && fs.existsSync(darkFile)) {
-      filePath = darkFile;
-    } else if (fs.existsSync(lightFile)) {
-      filePath = lightFile;
-    } else if (theme === "dark" && fs.existsSync(lightFile)) {
-      // fallback dark → light
-      filePath = lightFile;
-    }
-
-    if (!filePath) continue; // skip unknown icons
-
-    try {
-      let raw = fs.readFileSync(filePath, "utf8");
-
-      // Strip XML declaration
-      raw = raw.replace(/<\?xml[^?]*\?>/gi, "").trim();
-
-      // Extract inner content + viewBox from the SVG
-      const viewBoxMatch = raw.match(/viewBox=["']([^"']+)["']/i);
-      const innerMatch = raw.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
-
-      if (!innerMatch) continue;
-
-      const inner = innerMatch[1].trim();
-      const viewBox = viewBoxMatch ? viewBoxMatch[1] : `0 0 ${size} ${size}`;
-
-      svgContents.push({ inner, viewBox, name });
-    } catch {
-      // skip unreadable files
-    }
+    const entry = icons[name];
+    if (!entry) continue;
+    const svgCode = entry[theme] || entry.light || entry.dark;
+    const parsed = extractInnerSVG(svgCode);
+    if (parsed) resolved.push({ name, ...parsed });
   }
 
-  if (!svgContents.length) {
+  if (!resolved.length) {
     return {
       statusCode: 404,
       headers: { "Content-Type": "image/svg+xml" },
@@ -68,39 +71,30 @@ exports.handler = async function (event) {
     };
   }
 
-  // Layout: perline wrapping
-  const cols = perline > 0 ? Math.min(perline, svgContents.length) : svgContents.length;
-  const rows = Math.ceil(svgContents.length / cols);
-
+  const cols = perline > 0 ? Math.min(perline, resolved.length) : resolved.length;
+  const rows = Math.ceil(resolved.length / cols);
   const totalWidth = cols * size + (cols - 1) * spacing;
   const totalHeight = rows * size + (rows - 1) * spacing;
 
-  const groups = svgContents.map(({ inner, viewBox, name }, i) => {
+  const groups = resolved.map(({ name, inner, viewBox }, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
 
-    // Parse original viewBox to scale correctly
     const [vx, vy, vw, vh] = viewBox.split(/\s+/).map(Number);
     const scaleX = size / (vw || size);
     const scaleY = size / (vh || size);
-    const offsetX = -(vx || 0) * scaleX;
-    const offsetY = -(vy || 0) * scaleY;
 
-    return `
-  <g transform="translate(${x}, ${y})" aria-label="${name}">
-    <g transform="scale(${scaleX}, ${scaleY}) translate(${offsetX / scaleX}, ${offsetY / scaleY})">
+    return `<g transform="translate(${x}, ${y})" aria-label="${name}">
+    <g transform="scale(${scaleX}, ${scaleY}) translate(${-(vx || 0)}, ${-(vy || 0)})">
       ${inner}
     </g>
   </g>`;
   });
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="${totalWidth}" height="${totalHeight}"
-  viewBox="0 0 ${totalWidth} ${totalHeight}"
-  role="img" aria-label="Tech icons">
-${groups.join("\n")}
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img" aria-label="Tech icons">
+  ${groups.join("\n  ")}
 </svg>`;
 
   return {
