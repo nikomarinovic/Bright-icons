@@ -1,3 +1,6 @@
+[functions]
+  included_files = ["icons/**"]
+
 [[redirects]]
   from = "/api/icons"
   to = "/.netlify/functions/icons"

@@ -1,12 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-// Build a lowercase -> real filename map once
+const iconsDir = path.join(__dirname, "icons");
+
 let fileMap = null;
 
 function getFileMap() {
   if (fileMap) return fileMap;
-  const iconsDir = path.join(process.cwd(), "icons");
   const files = fs.readdirSync(iconsDir);
   fileMap = {};
   for (const f of files) {
@@ -19,19 +19,15 @@ function getFileMap() {
 
 function findFile(name, theme) {
   const map = getFileMap();
-  const iconsDir = path.join(process.cwd(), "icons");
 
-  // Try dark variant first if theme=dark
   if (theme === "dark") {
     const darkKey = `${name}_dark.svg`;
     if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
   }
 
-  // Try exact name
   const lightKey = `${name}.svg`;
   if (map[lightKey]) return path.join(iconsDir, map[lightKey]);
 
-  // Fallback: dark even if light requested
   const darkKey = `${name}_dark.svg`;
   if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
 
