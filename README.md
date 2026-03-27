@@ -142,7 +142,7 @@ You can combine theme, size, spacing, and perline together:
 
 ## Centering Icons
 
-To center the icons in your README, wrap them in a <p> with align="center":
+To center icons in your README, wrap them inside a `<p>` element with `align="center"`:
 
 ```html
 <p align="center">
