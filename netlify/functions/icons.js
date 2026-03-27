@@ -35,11 +35,22 @@ function findFile(name, theme) {
 }
 
 function extractInnerSVG(svgString) {
+  // Get viewBox from opening svg tag
   const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
-  const innerMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
-  if (!innerMatch) return null;
-  let inner = innerMatch[1].trim();
+  
+  // Find the first opening <svg> and strip everything up to and including it
+  const openMatch = svgString.match(/<svg[^>]*>/i);
+  if (!openMatch) return null;
+  
+  const start = svgString.indexOf(openMatch[0]) + openMatch[0].length;
+  // Find the LAST </svg> tag
+  const end = svgString.lastIndexOf("</svg>");
+  if (end === -1) return null;
+  
+  let inner = svgString.slice(start, end).trim();
+  // Replace any nested <svg> tags with <g>
   inner = inner.replace(/<svg([^>]*)>/gi, "<g>").replace(/<\/svg>/gi, "</g>");
+  
   return {
     inner,
     viewBox: viewBoxMatch ? viewBoxMatch[1] : "0 0 256 256",
