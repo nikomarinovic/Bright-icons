@@ -8,50 +8,49 @@ exports.handler = async function(event) {
   const size = parseInt(query.size) || 48;
   const spacing = parseInt(query.spacing) || 12;
   const theme = query.theme === 'dark' ? 'dark' : 'light';
+  const fallbackIcon = 'icon.svg'; // place a default fallback in /icons
 
   const names = iconsParam.split(',').map(s => s.trim()).filter(Boolean);
   const iconsDir = path.join(__dirname, '../../icons');
-  const fallbackIcon = path.join(iconsDir, 'default.svg'); // optional fallback
 
   let x = 0;
-  const svgGroups = [];
+  const svgs = [];
 
   for (const name of names) {
     let fileName = `${name}.svg`;
+
+    // check for dark version
     if (theme === 'dark' && fs.existsSync(path.join(iconsDir, `${name}_dark.svg`))) {
       fileName = `${name}_dark.svg`;
     }
+
     let filePath = path.join(iconsDir, fileName);
     if (!fs.existsSync(filePath)) {
-      if (fs.existsSync(fallbackIcon)) filePath = fallbackIcon;
-      else continue; // skip if missing
+      // fallback
+      filePath = path.join(iconsDir, fallbackIcon);
+      if (!fs.existsSync(filePath)) continue;
     }
 
     let content = fs.readFileSync(filePath, 'utf-8');
 
-    // Extract original viewBox and inner SVG content
+    // Make sure <svg> has proper width/height/viewBox
     const viewBoxMatch = content.match(/viewBox="([^"]+)"/i);
-    let innerContent = content.replace(/<\s*svg[^>]*>/i, '').replace(/<\/\s*svg>/i, '');
-    let vb = viewBoxMatch ? viewBoxMatch[1].split(' ').map(Number) : [0,0,size,size];
-    const [vbX, vbY, vbWidth, vbHeight] = vb;
-
-    // scale factor to fit requested size
-    const scale = size / Math.max(vbWidth, vbHeight);
-
-    svgGroups.push(`<g transform="translate(${x},0) scale(${scale})">${innerContent}</g>`);
+    let innerSvg = content.replace(/<\s*svg[^>]*>/i, '').replace(/<\/\s*svg>/i, '');
+    const iconSvg = `<svg x="${x}" y="0" width="${size}" height="${size}" viewBox="${viewBoxMatch ? viewBoxMatch[1] : `0 0 ${size} ${size}`}" xmlns="http://www.w3.org/2000/svg">${innerSvg}</svg>`;
+    svgs.push(iconSvg);
     x += size + spacing;
   }
 
-  const width = x > 0 ? x - spacing : 0;
-  const height = size;
+  const totalWidth = x > 0 ? x - spacing : 0;
+  const totalHeight = size;
 
-  const combinedSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${svgGroups.join('')}</svg>`;
+  const combinedSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}">${svgs.join('')}</svg>`;
 
   return {
     statusCode: 200,
-    headers: {
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=86400'
+    headers: { 
+      'Content-Type': 'image/svg+xml', 
+      'Cache-Control': 'public, max-age=86400' 
     },
     body: combinedSvg
   };
