@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const iconsDir = path.join(__dirname, "icons");
+const iconsDir = path.join(__dirname, "..", "..", "icons");
 
 let fileMap = null;
 
