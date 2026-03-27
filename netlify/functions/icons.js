@@ -1,28 +1,44 @@
 const fs = require("fs");
 const path = require("path");
 
-let iconsMap = null;
+// Build a lowercase -> real filename map once
+let fileMap = null;
 
-function loadIcons() {
-  if (iconsMap) return iconsMap;
-  const jsonPath = path.join(process.cwd(), "data", "icons.json");
-  const raw = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
-  iconsMap = {};
-  for (const icon of raw) {
-    const key = icon.name.toLowerCase();
-    const def = icon.variants?.default;
-    if (def) {
-      iconsMap[key] = {
-        light: def.lightCode || def.darkCode || null,
-        dark: def.darkCode || def.lightCode || null,
-      };
+function getFileMap() {
+  if (fileMap) return fileMap;
+  const iconsDir = path.join(process.cwd(), "icons");
+  const files = fs.readdirSync(iconsDir);
+  fileMap = {};
+  for (const f of files) {
+    if (f.endsWith(".svg")) {
+      fileMap[f.toLowerCase()] = f;
     }
   }
-  return iconsMap;
+  return fileMap;
+}
+
+function findFile(name, theme) {
+  const map = getFileMap();
+  const iconsDir = path.join(process.cwd(), "icons");
+
+  // Try dark variant first if theme=dark
+  if (theme === "dark") {
+    const darkKey = `${name}_dark.svg`;
+    if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
+  }
+
+  // Try exact name
+  const lightKey = `${name}.svg`;
+  if (map[lightKey]) return path.join(iconsDir, map[lightKey]);
+
+  // Fallback: dark even if light requested
+  const darkKey = `${name}_dark.svg`;
+  if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
+
+  return null;
 }
 
 function extractInnerSVG(svgString) {
-  if (!svgString) return null;
   const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
   const innerMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
   if (!innerMatch) return null;
@@ -47,20 +63,15 @@ exports.handler = async function (event) {
     return { statusCode: 400, body: "Missing ?i= parameter" };
   }
 
-  let icons;
-  try {
-    icons = loadIcons();
-  } catch (e) {
-    return { statusCode: 500, body: "Could not load icons.json: " + e.message };
-  }
-
   const resolved = [];
   for (const name of iconNames) {
-    const entry = icons[name];
-    if (!entry) continue;
-    const svgCode = entry[theme] || entry.light || entry.dark;
-    const parsed = extractInnerSVG(svgCode);
-    if (parsed) resolved.push({ name, ...parsed });
+    const filePath = findFile(name, theme);
+    if (!filePath) continue;
+    try {
+      const raw = fs.readFileSync(filePath, "utf8");
+      const parsed = extractInnerSVG(raw);
+      if (parsed) resolved.push({ name, ...parsed });
+    } catch {}
   }
 
   if (!resolved.length) {
@@ -81,21 +92,13 @@ exports.handler = async function (event) {
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
-
     const [vx, vy, vw, vh] = viewBox.split(/\s+/).map(Number);
     const scaleX = size / (vw || size);
     const scaleY = size / (vh || size);
-
-    return `<g transform="translate(${x}, ${y})" aria-label="${name}">
-    <g transform="scale(${scaleX}, ${scaleY}) translate(${-(vx || 0)}, ${-(vy || 0)})">
-      ${inner}
-    </g>
-  </g>`;
+    return `<g transform="translate(${x},${y})" aria-label="${name}"><g transform="scale(${scaleX},${scaleY}) translate(${-(vx||0)},${-(vy||0)})">${inner}</g></g>`;
   });
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img" aria-label="Tech icons">
-  ${groups.join("\n  ")}
-</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img">${groups.join("")}</svg>`;
 
   return {
     statusCode: 200,
