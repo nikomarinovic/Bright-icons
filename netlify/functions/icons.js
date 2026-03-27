@@ -38,8 +38,10 @@ function extractInnerSVG(svgString) {
   const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
   const innerMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
   if (!innerMatch) return null;
+  let inner = innerMatch[1].trim();
+  inner = inner.replace(/<svg([^>]*)>/gi, "<g>").replace(/<\/svg>/gi, "</g>");
   return {
-    inner: innerMatch[1].trim(),
+    inner,
     viewBox: viewBoxMatch ? viewBoxMatch[1] : "0 0 256 256",
   };
 }
