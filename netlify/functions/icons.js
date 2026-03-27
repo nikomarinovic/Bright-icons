@@ -1,8 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-
 const iconsDir = path.join(__dirname, "..", "..", "icons");
-
 let fileMap = null;
 
 function getFileMap() {
@@ -17,19 +15,49 @@ function getFileMap() {
   return fileMap;
 }
 
-function findFile(name, theme) {
+/**
+ * Given a raw icon name (e.g. "bmw", "bmw:mseries", "amazonconnect:inverted")
+ * and a theme, find the best matching file.
+ *
+ * URL colon syntax maps to filename lookup:
+ *   "bmw"              → bmw.svg / bmw_dark.svg
+ *   "bmw:mseries"      → bmw_mseries.svg OR bmw-mseries.svg (+ dark variants)
+ *   "amazonconnect:inverted" → amazonconnect_inverted.svg OR amazonconnect-inverted.svg
+ */
+function findFile(rawName, theme) {
   const map = getFileMap();
+  const [base, variant] = rawName.toLowerCase().split(":");
 
-  if (theme === "dark") {
-    const darkKey = `${name}_dark.svg`;
-    if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
+  // Build candidate filenames in priority order
+  const candidates = [];
+
+  if (variant) {
+    if (theme === "dark") {
+      // Prefer explicit _dark suffix
+      candidates.push(`${base}_${variant}_dark.svg`);
+      candidates.push(`${base}-${variant}_dark.svg`);
+    }
+    // Light/default versions
+    candidates.push(`${base}_${variant}.svg`);
+    candidates.push(`${base}-${variant}.svg`);
+    // Fallback: dark as only available version
+    if (theme !== "dark") {
+      candidates.push(`${base}_${variant}_dark.svg`);
+      candidates.push(`${base}-${variant}_dark.svg`);
+    }
+  } else {
+    if (theme === "dark") {
+      candidates.push(`${base}_dark.svg`);
+    }
+    candidates.push(`${base}.svg`);
+    if (theme !== "dark") {
+      candidates.push(`${base}_dark.svg`);
+    }
   }
 
-  const lightKey = `${name}.svg`;
-  if (map[lightKey]) return path.join(iconsDir, map[lightKey]);
-
-  const darkKey = `${name}_dark.svg`;
-  if (map[darkKey]) return path.join(iconsDir, map[darkKey]);
+  for (const key of candidates) {
+    if (map[key]) return path.join(iconsDir, map[key]);
+  }
 
   return null;
 }
@@ -49,7 +77,6 @@ exports.handler = async function (event) {
     return { statusCode: 400, body: "Missing ?i= parameter" };
   }
 
-  // Load each SVG as base64 and embed via <image>
   const resolved = [];
   for (const name of iconNames) {
     const filePath = findFile(name, theme);
