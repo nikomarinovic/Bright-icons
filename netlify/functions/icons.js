@@ -35,22 +35,17 @@ function findFile(name, theme) {
 }
 
 function extractInnerSVG(svgString) {
-  // Get viewBox from opening svg tag
   const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
-  
-  // Find the first opening <svg> and strip everything up to and including it
   const openMatch = svgString.match(/<svg[^>]*>/i);
   if (!openMatch) return null;
-  
+
   const start = svgString.indexOf(openMatch[0]) + openMatch[0].length;
-  // Find the LAST </svg> tag
   const end = svgString.lastIndexOf("</svg>");
   if (end === -1) return null;
-  
+
   let inner = svgString.slice(start, end).trim();
-  // Replace any nested <svg> tags with <g>
   inner = inner.replace(/<svg([^>]*)>/gi, "<g>").replace(/<\/svg>/gi, "</g>");
-  
+
   return {
     inner,
     viewBox: viewBoxMatch ? viewBoxMatch[1] : "0 0 256 256",
@@ -101,10 +96,8 @@ exports.handler = async function (event) {
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
-    const [vx, vy, vw, vh] = viewBox.split(/\s+/).map(Number);
-    const scaleX = size / (vw || size);
-    const scaleY = size / (vh || size);
-    return `<g transform="translate(${x},${y})" aria-label="${name}"><g transform="scale(${scaleX},${scaleY}) translate(${-(vx||0)},${-(vy||0)})">${inner}</g></g>`;
+    // Use a nested <svg> with x/y/width/height — this handles all viewBox scaling correctly
+    return `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="${viewBox}" xmlns="http://www.w3.org/2000/svg" aria-label="${name}">${inner}</svg>`;
   });
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img">${groups.join("")}</svg>`;
