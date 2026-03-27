@@ -34,24 +34,6 @@ function findFile(name, theme) {
   return null;
 }
 
-function extractInnerSVG(svgString) {
-  const viewBoxMatch = svgString.match(/viewBox=["']([^"']+)["']/i);
-  const openMatch = svgString.match(/<svg[^>]*>/i);
-  if (!openMatch) return null;
-
-  const start = svgString.indexOf(openMatch[0]) + openMatch[0].length;
-  const end = svgString.lastIndexOf("</svg>");
-  if (end === -1) return null;
-
-  let inner = svgString.slice(start, end).trim();
-  inner = inner.replace(/<svg([^>]*)>/gi, "<g>").replace(/<\/svg>/gi, "</g>");
-
-  return {
-    inner,
-    viewBox: viewBoxMatch ? viewBoxMatch[1] : "0 0 256 256",
-  };
-}
-
 exports.handler = async function (event) {
   const params = event.queryStringParameters || {};
   const iconNames = (params.i || "")
@@ -67,14 +49,15 @@ exports.handler = async function (event) {
     return { statusCode: 400, body: "Missing ?i= parameter" };
   }
 
+  // Load each SVG as base64 and embed via <image>
   const resolved = [];
   for (const name of iconNames) {
     const filePath = findFile(name, theme);
     if (!filePath) continue;
     try {
-      const raw = fs.readFileSync(filePath, "utf8");
-      const parsed = extractInnerSVG(raw);
-      if (parsed) resolved.push({ name, ...parsed });
+      const raw = fs.readFileSync(filePath);
+      const b64 = raw.toString("base64");
+      resolved.push({ name, b64 });
     } catch {}
   }
 
@@ -91,16 +74,15 @@ exports.handler = async function (event) {
   const totalWidth = cols * size + (cols - 1) * spacing;
   const totalHeight = rows * size + (rows - 1) * spacing;
 
-  const groups = resolved.map(({ name, inner, viewBox }, i) => {
+  const images = resolved.map(({ name, b64 }, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
-    // Use a nested <svg> with x/y/width/height — this handles all viewBox scaling correctly
-    return `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="${viewBox}" xmlns="http://www.w3.org/2000/svg" aria-label="${name}">${inner}</svg>`;
+    return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="data:image/svg+xml;base64,${b64}" aria-label="${name}"/>`;
   });
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img">${groups.join("")}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img">${images.join("")}</svg>`;
 
   return {
     statusCode: 200,
