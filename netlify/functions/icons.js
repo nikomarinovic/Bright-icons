@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+
 const iconsDir = path.join(__dirname, "..", "..", "icons");
 let fileMap = null;
 
@@ -15,32 +16,18 @@ function getFileMap() {
   return fileMap;
 }
 
-/**
- * Given a raw icon name (e.g. "bmw", "bmw:mseries", "amazonconnect:inverted")
- * and a theme, find the best matching file.
- *
- * URL colon syntax maps to filename lookup:
- *   "bmw"              → bmw.svg / bmw_dark.svg
- *   "bmw:mseries"      → bmw_mseries.svg OR bmw-mseries.svg (+ dark variants)
- *   "amazonconnect:inverted" → amazonconnect_inverted.svg OR amazonconnect-inverted.svg
- */
 function findFile(rawName, theme) {
   const map = getFileMap();
   const [base, variant] = rawName.toLowerCase().split(":");
 
-  // Build candidate filenames in priority order
   const candidates = [];
-
   if (variant) {
     if (theme === "dark") {
-      // Prefer explicit _dark suffix
       candidates.push(`${base}_${variant}_dark.svg`);
       candidates.push(`${base}-${variant}_dark.svg`);
     }
-    // Light/default versions
     candidates.push(`${base}_${variant}.svg`);
     candidates.push(`${base}-${variant}.svg`);
-    // Fallback: dark as only available version
     if (theme !== "dark") {
       candidates.push(`${base}_${variant}_dark.svg`);
       candidates.push(`${base}-${variant}_dark.svg`);
@@ -58,16 +45,50 @@ function findFile(rawName, theme) {
   for (const key of candidates) {
     if (map[key]) return path.join(iconsDir, map[key]);
   }
-
   return null;
+}
+
+function parseSvg(filePath) {
+  const raw = fs.readFileSync(filePath, "utf8");
+
+  let viewBox = null;
+  const vbMatch = raw.match(/viewBox=["']([^"']+)["']/i);
+  if (vbMatch) {
+    viewBox = vbMatch[1].trim();
+  } else {
+    const wMatch = raw.match(/\bwidth=["']([0-9.]+)["']/i);
+    const hMatch = raw.match(/\bheight=["']([0-9.]+)["']/i);
+    const w = wMatch ? parseFloat(wMatch[1]) : 24;
+    const h = hMatch ? parseFloat(hMatch[1]) : 24;
+    viewBox = `0 0 ${w} ${h}`;
+  }
+
+  const inner = raw
+    .replace(/<\?xml[^>]*\?>/gi, "")
+    .replace(/<!DOCTYPE[^>]*>/gi, "")
+    .replace(/<!--[\s\S]*?-->/g, "")          
+    .replace(/<svg[^>]*>/i, "")
+    .replace(/<\/svg>\s*$/i, "")
+    .trim();
+
+  return { viewBox, inner };
+}
+
+function namespaceIds(svgContent, prefix) {
+  let out = svgContent.replace(/\bid=["']([^"']+)["']/g, (_, id) => `id="${prefix}_${id}"`);
+  out = out.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${prefix}_${id})`);
+  out = out.replace(/(xlink:href|href)=["']#([^"']+)["']/g, (_, attr, id) => `${attr}="#${prefix}_${id}"`);
+  return out;
 }
 
 exports.handler = async function (event) {
   const params = event.queryStringParameters || {};
+
   const iconNames = (params.i || "")
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
+
   const theme = params.theme === "dark" ? "dark" : "light";
   const size = Math.min(Math.max(parseInt(params.size) || 48, 16), 128);
   const spacing = Math.min(Math.max(parseInt(params.spacing) || 12, 0), 64);
@@ -82,17 +103,17 @@ exports.handler = async function (event) {
     const filePath = findFile(name, theme);
     if (!filePath) continue;
     try {
-      const raw = fs.readFileSync(filePath);
-      const b64 = raw.toString("base64");
-      resolved.push({ name, b64 });
-    } catch {}
+      const { viewBox, inner } = parseSvg(filePath);
+      resolved.push({ name, viewBox, inner });
+    } catch {
+    }
   }
 
   if (!resolved.length) {
     return {
       statusCode: 404,
       headers: { "Content-Type": "image/svg+xml" },
-      body: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"></svg>`,
+      body: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"></svg>`,
     };
   }
 
@@ -101,15 +122,33 @@ exports.handler = async function (event) {
   const totalWidth = cols * size + (cols - 1) * spacing;
   const totalHeight = rows * size + (rows - 1) * spacing;
 
-  const images = resolved.map(({ name, b64 }, i) => {
+
+  const iconElements = resolved.map(({ name, viewBox, inner }, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
-    return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="data:image/svg+xml;base64,${b64}" aria-label="${name}"/>`;
+
+
+    const safePrefix = `ic${i}_${name.replace(/[^a-z0-9]/g, "")}`;
+    const safeInner = namespaceIds(inner, safePrefix);
+
+    return (
+      `<svg x="${x}" y="${y}" width="${size}" height="${size}" ` +
+      `viewBox="${viewBox}" xmlns="http://www.w3.org/2000/svg" ` +
+      `overflow="visible" role="img" aria-label="${name}">` +
+      safeInner +
+      `</svg>`
+    );
   });
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}" role="img">${images.join("")}</svg>`;
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" ` +
+    `width="${totalWidth}" height="${totalHeight}" ` +
+    `viewBox="0 0 ${totalWidth} ${totalHeight}" ` +
+    `role="img">` +
+    iconElements.join("") +
+    `</svg>`;
 
   return {
     statusCode: 200,
