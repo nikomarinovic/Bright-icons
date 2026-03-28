@@ -51,11 +51,14 @@ function findFile(rawName, theme) {
 function parseSvg(filePath) {
   const raw = fs.readFileSync(filePath, "utf8");
 
+  // Extract viewBox from the ROOT <svg> tag only
   let viewBox = null;
-  const vbMatch = raw.match(/viewBox=["']([^"']+)["']/i);
-  if (vbMatch) {
-    viewBox = vbMatch[1].trim();
-  } else {
+  const rootSvgMatch = raw.match(/<svg[^>]*>/i);
+  if (rootSvgMatch) {
+    const vbMatch = rootSvgMatch[0].match(/viewBox=["']([^"']+)["']/i);
+    if (vbMatch) viewBox = vbMatch[1].trim();
+  }
+  if (!viewBox) {
     const wMatch = raw.match(/\bwidth=["']([0-9.]+)["']/i);
     const hMatch = raw.match(/\bheight=["']([0-9.]+)["']/i);
     const w = wMatch ? parseFloat(wMatch[1]) : 24;
@@ -63,13 +66,27 @@ function parseSvg(filePath) {
     viewBox = `0 0 ${w} ${h}`;
   }
 
-  const inner = raw
+  let inner = raw
     .replace(/<\?xml[^>]*\?>/gi, "")
     .replace(/<!DOCTYPE[^>]*>/gi, "")
-    .replace(/<!--[\s\S]*?-->/g, "")          
-    .replace(/<svg[^>]*>/i, "")
-    .replace(/<\/svg>\s*$/i, "")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<svg[^>]*>/i, "")       // remove opening <svg> tag
+    .replace(/<\/svg>\s*$/i, "")      // remove closing </svg> tag
     .trim();
+
+  // Strip <filter> blocks — SVG filters force rasterisation at rendered pixel
+  // size, which is exactly what causes blurriness. The feFlood+feComposite
+  // colouring pattern used in these icons is cosmetic only; removing it leaves
+  // the icon shapes intact via their own fill colours.
+  inner = inner.replace(/<filter[\s\S]*?<\/filter>/gi, "");
+
+  // Remove filter="url(#...)" references left behind on elements
+  inner = inner.replace(/\s+filter="url\(#[^"]*\)"/gi, "");
+
+  // Remove clipPath definitions and clip-path attributes (also rasterise at
+  // render size and are usually redundant for icon display)
+  inner = inner.replace(/<clipPath[\s\S]*?<\/clipPath>/gi, "");
+  inner = inner.replace(/\s+clip-path="url\(#[^"]*\)"/gi, "");
 
   return { viewBox, inner };
 }
@@ -106,6 +123,7 @@ exports.handler = async function (event) {
       const { viewBox, inner } = parseSvg(filePath);
       resolved.push({ name, viewBox, inner });
     } catch {
+      // skip unreadable files silently
     }
   }
 
@@ -122,21 +140,21 @@ exports.handler = async function (event) {
   const totalWidth = cols * size + (cols - 1) * spacing;
   const totalHeight = rows * size + (rows - 1) * spacing;
 
-
   const iconElements = resolved.map(({ name, viewBox, inner }, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const x = col * (size + spacing);
     const y = row * (size + spacing);
 
-
     const safePrefix = `ic${i}_${name.replace(/[^a-z0-9]/g, "")}`;
     const safeInner = namespaceIds(inner, safePrefix);
 
+    // overflow="hidden" — critical: prevents icon content from bleeding
+    // outside its cell into adjacent icons (was causing visual duplication)
     return (
       `<svg x="${x}" y="${y}" width="${size}" height="${size}" ` +
       `viewBox="${viewBox}" xmlns="http://www.w3.org/2000/svg" ` +
-      `overflow="visible" role="img" aria-label="${name}">` +
+      `overflow="hidden" role="img" aria-label="${name}">` +
       safeInner +
       `</svg>`
     );
