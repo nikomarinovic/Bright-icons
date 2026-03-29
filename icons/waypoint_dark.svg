@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256 256" width="256" height="256">
+  <defs><clipPath id="bgc"><rect width="256" height="256" rx="51.2"/></clipPath><filter id="f_o1" color-interpolation-filters="sRGB"><feFlood flood-color="#f5f5f5" result="c"/><feComposite in="c" in2="SourceAlpha" operator="in"/></filter></defs>
+  <rect width="256" height="256" rx="51.2" fill="#14C6CB"/>
+  
+  <g opacity="1" transform="translate(128,128) rotate(0)" filter="url(#f_o1)"><svg x="-76.8" y="-76.8" width="153.6" height="153.6" viewBox="0 0 16 16"><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_bgCarrier" stroke-width="0"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g xmlns="http://www.w3.org/2000/svg" id="SVGRepo_iconCarrier"> <g fill="#14C6CB"> <path d="M16 3l-1.998 3.463L12.004 3H16zM5.334 5.312H4l3.332 5.777L6 13.4 0 3h6.667L10 8.778l.666-1.155L8 3h2.666L12 5.312l1.334 2.31L10 13.4 5.334 5.312z"/> </g> </g></svg></g>
+  
+</svg>
